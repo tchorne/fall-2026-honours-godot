@@ -39,3 +39,6 @@
 *.anim filter=lfs diff=lfs merge=lfs -text
 *.mesh filter=lfs diff=lfs merge=lfs -text
 *.lmbake filter=lfs diff=lfs merge=lfs -text
+
+# Big resources
+Recording/Recordings/*.tres filter=lfs diff=lfs merge=lfs -text

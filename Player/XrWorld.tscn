@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://c536jyk5dsl3t"]
+
+[ext_resource type="Texture2D" uid="uid://bisjeie07vlq8" path="res://MaterialLibrary/PrototypeTextures/Light/texture_06.png" id="1_vnh3n"]
+[ext_resource type="PackedScene" uid="uid://icjbkcugpjd" path="res://Player/Sword/sword.tscn" id="2_jnx8t"]
+[ext_resource type="Script" uid="uid://jrxx8wr0ba2k" path="res://Recording/RecordingComponent.gd" id="2_kq1qx"]
+[ext_resource type="Script" uid="uid://2b0r6jqxukt4" path="res://Utility/LogDisplay.gd" id="2_sh4lu"]
+[ext_resource type="Script" uid="uid://bgnm3uyf571ef" path="res://Recording/DemoRecorder.gd" id="5_ovva8"]
+[ext_resource type="Script" uid="uid://bbx0orgysktjg" path="res://Player/xr_setup.gd" id="6_dddrg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vnh3n"]
+albedo_texture = ExtResource("1_vnh3n")
+
+[sub_resource type="BoxMesh" id="BoxMesh_4lwy2"]
+
+[sub_resource type="Environment" id="Environment_4lwy2"]
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+
+[node name="XrWorld" type="Node3D" unique_id=204854119]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=882435044]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 5, 0)
+material_override = SubResource("StandardMaterial3D_vnh3n")
+use_collision = true
+flip_faces = true
+
+[node name="XROrigin3D" type="XROrigin3D" parent="." unique_id=853026825]
+
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" unique_id=25428385]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+current = true
+
+[node name="RecordingComponent" type="Node" parent="XROrigin3D/XRCamera3D" unique_id=421112603]
+script = ExtResource("2_kq1qx")
+recording_name = "head"
+write = true
+metadata/_custom_type_script = "uid://jrxx8wr0ba2k"
+
+[node name="LeftHand" type="XRController3D" parent="XROrigin3D" unique_id=541203784]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
+tracker = &"left_hand"
+
+[node name="RecordingComponent" type="Node" parent="XROrigin3D/LeftHand" unique_id=962266796]
+script = ExtResource("2_kq1qx")
+recording_name = "hand_l"
+write = true
+metadata/_custom_type_script = "uid://jrxx8wr0ba2k"
+
+[node name="Hand" type="Node3D" parent="XROrigin3D/LeftHand" unique_id=1130331752]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/LeftHand/Hand" unique_id=397048218]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
+mesh = SubResource("BoxMesh_4lwy2")
+
+[node name="RightHand" type="XRController3D" parent="XROrigin3D" unique_id=1470817828]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
+tracker = &"right_hand"
+
+[node name="RecordingComponent" type="Node" parent="XROrigin3D/RightHand" unique_id=2008870655]
+script = ExtResource("2_kq1qx")
+recording_name = "hand_r"
+write = true
+metadata/_custom_type_script = "uid://jrxx8wr0ba2k"
+
+[node name="Hand" type="Node3D" parent="XROrigin3D/RightHand" unique_id=1592137693]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="XROrigin3D/RightHand/Hand" unique_id=1317127837]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
+mesh = SubResource("BoxMesh_4lwy2")
+
+[node name="Sword" type="Node3D" parent="XROrigin3D/RightHand" unique_id=281212010]
+transform = Transform3D(0.5, 0, 0, 0, 0.4205523, -0.27043626, 0, 0.27043626, 0.4205523, 0, -0.0314008, 0.044015378)
+
+[node name="sword" parent="XROrigin3D/RightHand/Sword" unique_id=27733889 instance=ExtResource("2_jnx8t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.3343104)
+
+[node name="SwordTip" type="Marker3D" parent="XROrigin3D/RightHand/Sword" unique_id=782112517]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5450041)
+
+[node name="RecordingComponent" type="Node" parent="XROrigin3D/RightHand/Sword/SwordTip" unique_id=770983933]
+script = ExtResource("2_kq1qx")
+recording_name = "sword_tip"
+write = true
+metadata/_custom_type_script = "uid://jrxx8wr0ba2k"
+
+[node name="Label3D" type="Label3D" parent="." unique_id=1401604936]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6216173, 0.70585287, -1.8889782)
+billboard = 2
+text = "TESDFSDFSDFsdf"
+vertical_alignment = 2
+script = ExtResource("2_sh4lu")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1208978261]
+environment = SubResource("Environment_4lwy2")
+
+[node name="Recorder" type="Node" parent="." unique_id=170774477 node_paths=PackedStringArray("recording_components")]
+script = ExtResource("5_ovva8")
+sample_rate = 60
+recording_components = [NodePath("../XROrigin3D/XRCamera3D/RecordingComponent"), NodePath("../XROrigin3D/LeftHand/RecordingComponent"), NodePath("../XROrigin3D/RightHand/RecordingComponent"), NodePath("../XROrigin3D/RightHand/Sword/SwordTip/RecordingComponent")]
+recording_file_path = "res://Recording/Recordings/recording_t1.tres"
+
+[node name="XRSetup" type="Node3D" parent="." unique_id=1539770447]
+script = ExtResource("6_dddrg")
+
+[connection signal="button_pressed" from="XROrigin3D/RightHand" to="Recorder" method="_on_right_hand_button_pressed"]
+[connection signal="button_released" from="XROrigin3D/RightHand" to="Recorder" method="_on_right_hand_button_released"]

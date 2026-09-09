@@ -1,2 +1,1 @@
-# fall-2026-honours-godot
-
+# Realtime Generation of Sword Slash Effects Using Tracked Position Data

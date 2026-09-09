@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://icjbkcugpjd"]
+
+[ext_resource type="PackedScene" uid="uid://drh6o4qt8mm8o" path="res://Player/Sword/sword.blend" id="1_vcvfs"]
+[ext_resource type="Texture2D" uid="uid://b62mwnow7ie13" path="res://Player/Sword/textures/sword_diffuse.png" id="2_bjp6t"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4lwy2"]
+albedo_texture = ExtResource("2_bjp6t")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_15oih"]
+albedo_texture = ExtResource("2_bjp6t")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_thdb7"]
+albedo_texture = ExtResource("2_bjp6t")
+
+[node name="sword" unique_id=27733889 instance=ExtResource("1_vcvfs")]
+
+[node name="Plane" parent="." index="0" unique_id=380595894]
+surface_material_override/0 = SubResource("StandardMaterial3D_4lwy2")
+surface_material_override/1 = SubResource("StandardMaterial3D_15oih")
+surface_material_override/2 = SubResource("StandardMaterial3D_thdb7")

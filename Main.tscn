@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bhox2obva3mdf"]
+
+[ext_resource type="PackedScene" uid="uid://c536jyk5dsl3t" path="res://Player/XrWorld.tscn" id="1_glv2v"]
+
+[node name="Main" type="Node" unique_id=1523883383]
+
+[node name="XrWorld" parent="." unique_id=204854119 instance=ExtResource("1_glv2v")]

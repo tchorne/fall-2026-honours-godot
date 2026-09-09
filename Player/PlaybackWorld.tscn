@@ -1,0 +1,126 @@
+[gd_scene format=3 uid="uid://d1m12q5d74ij6"]
+
+[ext_resource type="Texture2D" uid="uid://bisjeie07vlq8" path="res://MaterialLibrary/PrototypeTextures/Light/texture_06.png" id="1_oqb4a"]
+[ext_resource type="Script" uid="uid://jrxx8wr0ba2k" path="res://Recording/RecordingComponent.gd" id="2_www4e"]
+[ext_resource type="PackedScene" uid="uid://icjbkcugpjd" path="res://Player/Sword/sword.tscn" id="3_mvc0x"]
+[ext_resource type="Script" uid="uid://2b0r6jqxukt4" path="res://Utility/LogDisplay.gd" id="4_0bmy0"]
+[ext_resource type="Script" uid="uid://dyh2avnvicgwv" path="res://Recording/DemoPlayer.gd" id="5_dm5oq"]
+[ext_resource type="Resource" uid="uid://bjqne4otbaih" path="res://Recording/Recordings/recording_t1.tres" id="6_oqb4a"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vnh3n"]
+albedo_texture = ExtResource("1_oqb4a")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_4lwy2"]
+top_radius = 0.1
+bottom_radius = 0.15
+height = 0.1
+
+[sub_resource type="BoxMesh" id="BoxMesh_4lwy2"]
+
+[sub_resource type="Environment" id="Environment_4lwy2"]
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+
+[node name="PlaybackWorld" type="Node3D" unique_id=204854119]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=882435044]
+transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 5, 0)
+material_override = SubResource("StandardMaterial3D_vnh3n")
+use_collision = true
+flip_faces = true
+
+[node name="PlaybackPlayer" type="Node3D" parent="." unique_id=1832047378]
+
+[node name="XRCamera3D" type="Marker3D" parent="PlaybackPlayer" unique_id=353527065]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+
+[node name="Camera3D" type="Camera3D" parent="PlaybackPlayer/XRCamera3D" unique_id=1893024075]
+current = true
+
+[node name="RecordingComponent" type="Node" parent="PlaybackPlayer/XRCamera3D" unique_id=1674721110]
+script = ExtResource("2_www4e")
+recording_name = "head"
+playback = true
+metadata/_custom_type_script = "uid://jrxx8wr0ba2k"
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlaybackPlayer/XRCamera3D" unique_id=1451008516]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0.053047895)
+mesh = SubResource("CylinderMesh_4lwy2")
+
+[node name="LeftHand" type="Marker3D" parent="PlaybackPlayer" unique_id=601368237]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 1, -0.5)
+
+[node name="RecordingComponent" type="Node" parent="PlaybackPlayer/LeftHand" unique_id=890649059]
+script = ExtResource("2_www4e")
+recording_name = "hand_l"
+playback = true
+metadata/_custom_type_script = "uid://jrxx8wr0ba2k"
+
+[node name="Hand" type="Node3D" parent="PlaybackPlayer/LeftHand" unique_id=210623357]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlaybackPlayer/LeftHand/Hand" unique_id=834671069]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
+mesh = SubResource("BoxMesh_4lwy2")
+
+[node name="RightHand" type="Marker3D" parent="PlaybackPlayer" unique_id=2069162675]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 1, -0.5)
+
+[node name="RecordingComponent" type="Node" parent="PlaybackPlayer/RightHand" unique_id=891660480]
+script = ExtResource("2_www4e")
+recording_name = "hand_r"
+playback = true
+metadata/_custom_type_script = "uid://jrxx8wr0ba2k"
+
+[node name="Hand" type="Node3D" parent="PlaybackPlayer/RightHand" unique_id=1127186553]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="PlaybackPlayer/RightHand/Hand" unique_id=1594754396]
+transform = Transform3D(0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05, 0, 0, 0)
+mesh = SubResource("BoxMesh_4lwy2")
+
+[node name="Sword" type="Node3D" parent="PlaybackPlayer/RightHand" unique_id=1548764530]
+transform = Transform3D(0.5, 0, 0, 0, 0.4205523, -0.27043626, 0, 0.27043626, 0.4205523, 0, -0.0314008, 0.044015378)
+
+[node name="sword" parent="PlaybackPlayer/RightHand/Sword" unique_id=27733889 instance=ExtResource("3_mvc0x")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1.3343104)
+
+[node name="SwordTip" type="Marker3D" parent="PlaybackPlayer/RightHand/Sword" unique_id=1461868236]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.5450041)
+
+[node name="RecordingComponent" type="Node" parent="PlaybackPlayer/RightHand/Sword/SwordTip" unique_id=1774243081]
+script = ExtResource("2_www4e")
+recording_name = "sword_tip"
+metadata/_custom_type_script = "uid://jrxx8wr0ba2k"
+
+[node name="Label3D" type="Label3D" parent="." unique_id=1401604936]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6216173, 0.96156037, -1.8889782)
+billboard = 2
+text = "TESDFSDFSDFsdf"
+vertical_alignment = 2
+script = ExtResource("4_0bmy0")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1208978261]
+environment = SubResource("Environment_4lwy2")
+
+[node name="DemoPlayer" type="Node" parent="." unique_id=662191926 node_paths=PackedStringArray("recording_components")]
+script = ExtResource("5_dm5oq")
+recording_components = [NodePath("../PlaybackPlayer/XRCamera3D/RecordingComponent"), NodePath("../PlaybackPlayer/LeftHand/RecordingComponent"), NodePath("../PlaybackPlayer/RightHand/RecordingComponent"), NodePath("../PlaybackPlayer/RightHand/Sword/SwordTip/RecordingComponent")]
+current_recording = ExtResource("6_oqb4a")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=1334509229]
+
+[node name="Timeline" type="HSlider" parent="UI" unique_id=1225758791]
+unique_name_in_owner = true
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 84.0
+offset_top = -16.0
+offset_right = -69.0
+grow_horizontal = 2
+grow_vertical = 0
+step = 0.016
+
+[connection signal="drag_ended" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_drag_ended"]
+[connection signal="drag_started" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_drag_started"]
+[connection signal="value_changed" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_value_changed"]
