@@ -1,14 +1,16 @@
 [gd_scene format=3 uid="uid://d1m12q5d74ij6"]
 
-[ext_resource type="Texture2D" uid="uid://bisjeie07vlq8" path="res://MaterialLibrary/PrototypeTextures/Light/texture_06.png" id="1_oqb4a"]
+[ext_resource type="Texture2D" uid="uid://c4sgh6wbpr17w" path="res://MaterialLibrary/PrototypeTextures/Dark/texture_05.png" id="1_www4e"]
 [ext_resource type="Script" uid="uid://jrxx8wr0ba2k" path="res://Recording/RecordingComponent.gd" id="2_www4e"]
 [ext_resource type="PackedScene" uid="uid://icjbkcugpjd" path="res://Player/Sword/sword.tscn" id="3_mvc0x"]
 [ext_resource type="Script" uid="uid://2b0r6jqxukt4" path="res://Utility/LogDisplay.gd" id="4_0bmy0"]
 [ext_resource type="Script" uid="uid://dyh2avnvicgwv" path="res://Recording/DemoPlayer.gd" id="5_dm5oq"]
-[ext_resource type="Resource" uid="uid://bjqne4otbaih" path="res://Recording/Recordings/recording_t1.tres" id="6_oqb4a"]
+[ext_resource type="Resource" uid="uid://k8d8m1cqmke3" path="res://Recording/Recordings/recording_t1.tres" id="6_oqb4a"]
+[ext_resource type="Script" uid="uid://jetxc6eghcm1" path="res://Analysis/AnalysisTool.gd" id="7_mvc0x"]
+[ext_resource type="Script" uid="uid://boed3v88o7puo" path="res://Utility/trail_renderer.gd" id="7_www4e"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vnh3n"]
-albedo_texture = ExtResource("1_oqb4a")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mvc0x"]
+albedo_texture = ExtResource("1_www4e")
 
 [sub_resource type="CylinderMesh" id="CylinderMesh_4lwy2"]
 top_radius = 0.1
@@ -21,11 +23,14 @@ height = 0.1
 ambient_light_source = 2
 ambient_light_color = Color(1, 1, 1, 1)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_www4e"]
+albedo_color = Color(1, 0, 0, 1)
+
 [node name="PlaybackWorld" type="Node3D" unique_id=204854119]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=882435044]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 5, 0)
-material_override = SubResource("StandardMaterial3D_vnh3n")
+material_override = SubResource("StandardMaterial3D_mvc0x")
 use_collision = true
 flip_faces = true
 
@@ -98,6 +103,14 @@ text = "TESDFSDFSDFsdf"
 vertical_alignment = 2
 script = ExtResource("4_0bmy0")
 
+[node name="Stats" type="Label3D" parent="." unique_id=980030870]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0412028, 0.96156037, -2.0462554)
+billboard = 2
+text = "TESDFSDFSDFsdf"
+vertical_alignment = 2
+script = ExtResource("4_0bmy0")
+stats = true
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1208978261]
 environment = SubResource("Environment_4lwy2")
 
@@ -105,6 +118,10 @@ environment = SubResource("Environment_4lwy2")
 script = ExtResource("5_dm5oq")
 recording_components = [NodePath("../PlaybackPlayer/XRCamera3D/RecordingComponent"), NodePath("../PlaybackPlayer/LeftHand/RecordingComponent"), NodePath("../PlaybackPlayer/RightHand/RecordingComponent"), NodePath("../PlaybackPlayer/RightHand/Sword/SwordTip/RecordingComponent")]
 current_recording = ExtResource("6_oqb4a")
+
+[node name="DemoRecordingAnalysis" type="Node" parent="." unique_id=5364303]
+script = ExtResource("7_mvc0x")
+demo_path = "uid://k8d8m1cqmke3"
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1334509229]
 
@@ -120,6 +137,11 @@ offset_right = -69.0
 grow_horizontal = 2
 grow_vertical = 0
 step = 0.016
+
+[node name="TrailRenderer" type="MultiMeshInstance3D" parent="." unique_id=819520039]
+unique_name_in_owner = true
+material_override = SubResource("StandardMaterial3D_www4e")
+script = ExtResource("7_www4e")
 
 [connection signal="drag_ended" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_drag_ended"]
 [connection signal="drag_started" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_drag_started"]

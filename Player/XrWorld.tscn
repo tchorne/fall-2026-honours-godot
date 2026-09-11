@@ -1,14 +1,14 @@
 [gd_scene format=3 uid="uid://c536jyk5dsl3t"]
 
-[ext_resource type="Texture2D" uid="uid://bisjeie07vlq8" path="res://MaterialLibrary/PrototypeTextures/Light/texture_06.png" id="1_vnh3n"]
+[ext_resource type="Texture2D" uid="uid://b5f5btymkngxs" path="res://MaterialLibrary/PrototypeTextures/Green/texture_08.png" id="1_dddrg"]
 [ext_resource type="PackedScene" uid="uid://icjbkcugpjd" path="res://Player/Sword/sword.tscn" id="2_jnx8t"]
 [ext_resource type="Script" uid="uid://jrxx8wr0ba2k" path="res://Recording/RecordingComponent.gd" id="2_kq1qx"]
 [ext_resource type="Script" uid="uid://2b0r6jqxukt4" path="res://Utility/LogDisplay.gd" id="2_sh4lu"]
 [ext_resource type="Script" uid="uid://bgnm3uyf571ef" path="res://Recording/DemoRecorder.gd" id="5_ovva8"]
 [ext_resource type="Script" uid="uid://bbx0orgysktjg" path="res://Player/xr_setup.gd" id="6_dddrg"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vnh3n"]
-albedo_texture = ExtResource("1_vnh3n")
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ton8o"]
+albedo_texture = ExtResource("1_dddrg")
 
 [sub_resource type="BoxMesh" id="BoxMesh_4lwy2"]
 
@@ -20,7 +20,7 @@ ambient_light_color = Color(1, 1, 1, 1)
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=882435044]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 5, 0)
-material_override = SubResource("StandardMaterial3D_vnh3n")
+material_override = SubResource("StandardMaterial3D_ton8o")
 use_collision = true
 flip_faces = true
 

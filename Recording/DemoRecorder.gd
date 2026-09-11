@@ -8,7 +8,6 @@ extends Node
 var current_recording : DemoRecording
 
 var is_recording := false
-var is_slicing := false
 var time_since_last_sample := 0.0
 var elapsed_time := 0.0
 
@@ -17,6 +16,8 @@ func start_recording():
 	is_recording = true
 	elapsed_time = 0.0
 	LoggerGlobal.info("Started recording")
+	current_recording.reset()
+	current_recording.sample_rate = sample_rate
 	pass
 
 func end_recording():
@@ -25,10 +26,8 @@ func end_recording():
 	LoggerGlobal.info("Saved recording to %s" % recording_file_path)
 
 func take_sample():
-	var samples := 0
 	for obj in recording_components:
 		if not obj.write: continue
-		samples += 1
 		var pos_rot = obj.get_pos_rot()
 		current_recording.add_sample(obj.recording_name, pos_rot[0], pos_rot[1])
 
@@ -36,8 +35,8 @@ func _process(delta: float) -> void:
 	if not is_recording: return
 	time_since_last_sample += delta
 	elapsed_time += delta
-	if (time_since_last_sample > 1.0/sample_rate):
-		time_since_last_sample = 0
+	while (time_since_last_sample > 1.0/sample_rate):
+		time_since_last_sample -= 1.0/sample_rate
 		take_sample()
 
 
@@ -61,10 +60,10 @@ func _on_right_hand_button_pressed(action_name: String) -> void:
 			end_recording()
 		else: 
 			start_recording()
-	if action_name == "trigger_click":
+	if action_name == "trigger_click" and current_recording:
 		current_recording.add_label("slash_started", elapsed_time)
 
 
 func _on_right_hand_button_released(action_name: String) -> void:
-	if action_name == "trigger_click":
+	if action_name == "trigger_click" and current_recording:
 		current_recording.add_label("slash_ended", elapsed_time)

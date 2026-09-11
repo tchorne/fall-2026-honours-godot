@@ -1,10 +1,17 @@
 extends Node
 
 var logMessages: Array[LoggedMessage] = []
+var statsCommands: Array[Callable] = []
 
 func get_text() -> String:
 	return "\n".join(logMessages.map(func (x): return str(x)))
-	
+
+func get_stats() -> String:
+	return "\n".join(statsCommands.map(func (x: Callable): return x.call()))
+
+func add_stat(description: String, get_data: Callable):
+	statsCommands.push_back(func (): return "%s: %s" % [description, get_data.call()])
+
 func trace(message: String):
 	var lm := LoggedMessage.new(Severity.TRACE, message)
 	
