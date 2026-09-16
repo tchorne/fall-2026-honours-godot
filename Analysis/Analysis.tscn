@@ -1,0 +1,103 @@
+[gd_scene format=3 uid="uid://cqd2ms26a1r3g"]
+
+[ext_resource type="Script" uid="uid://jetxc6eghcm1" path="res://Analysis/AnalysisTool.gd" id="1_rik7i"]
+[ext_resource type="Script" uid="uid://b8gswsclsstgw" path="res://Analysis/SlashDetectionEvaluator.gd" id="2_r1s7x"]
+[ext_resource type="Script" uid="uid://bqssfr6mxwlgg" path="res://Analysis/GeneticVelocityEvaluator.gd" id="3_o8jwe"]
+
+[sub_resource type="GDScript" id="GDScript_4lwy2"]
+resource_name = "2DLogDisplay"
+script/source = "extends Label
+
+@export var stats := false
+
+func _process(_delta: float) -> void:
+	text = LoggerGlobal.get_text() if not stats else LoggerGlobal.get_stats()
+"
+
+[sub_resource type="GDScript" id="GDScript_15oih"]
+resource_name = "ManualSlashDetector"
+script/source = "extends Node
+
+@export var hand_threshold := 0.0
+@export var tip_threshold := 0.0
+@export var vel_dot_forward_max := 10.0
+@export var hold_velocity_threshold := 0.5
+
+@onready var evaluator: SlashDetectionEvaluator = $\"../Evaluator\"
+
+
+func _on_evalute_manual_pressed() -> void:
+	var detector = VelocityEvaluator.new(hand_threshold, tip_threshold, vel_dot_forward_max, hold_velocity_threshold)
+	
+	LoggerGlobal.info(\"Starting evaluation with %s\" % [detector.to_string()])
+	var score = evaluator.evaluate(detector)
+	LoggerGlobal.info(\"Score: %f\" % score)
+"
+
+[node name="Analysis" type="Control" unique_id=435913117]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Button" type="Button" parent="." unique_id=847950311]
+layout_mode = 0
+offset_left = 42.0
+offset_top = 47.0
+offset_right = 190.0
+offset_bottom = 78.0
+text = "Generate Analysis"
+
+[node name="EvaluateManual" type="Button" parent="." unique_id=1172731347]
+layout_mode = 0
+offset_left = 43.0
+offset_top = 154.0
+offset_right = 191.0
+offset_bottom = 185.0
+text = "Evaluate Manual"
+
+[node name="Genetic" type="Button" parent="." unique_id=74198820]
+layout_mode = 0
+offset_left = 47.0
+offset_top = 238.0
+offset_right = 230.0
+offset_bottom = 269.0
+text = "Run Genetic Algorithm"
+
+[node name="Analysis" type="Node" parent="." unique_id=1204421779]
+script = ExtResource("1_rik7i")
+demo_path = "uid://k8d8m1cqmke3"
+velocity_delta = 6
+
+[node name="2DLogDisplay" type="Label" parent="." unique_id=1097556769]
+layout_mode = 0
+offset_left = 532.0
+offset_top = 41.0
+offset_right = 1114.0
+offset_bottom = 436.0
+script = SubResource("GDScript_4lwy2")
+
+[node name="Evaluator" type="Node" parent="." unique_id=2004568035]
+script = ExtResource("2_r1s7x")
+
+[node name="ManualSlashDetector" type="Node" parent="." unique_id=1441198986]
+script = SubResource("GDScript_15oih")
+hand_threshold = 5.0
+tip_threshold = 16.0
+
+[node name="GeneticVelocityEvaluator" type="Node" parent="." unique_id=1875515760]
+script = ExtResource("3_o8jwe")
+population_size = 10
+generations = 20
+top_n = 1
+initial_step_size = 0.01
+starting_hand_threshold = 5.09
+starting_tip_threshold = 15.36
+starting_vel_dot_forward_max = 10.04
+starting_hold_velocity_threshold = 0.52
+
+[connection signal="pressed" from="Button" to="Analysis" method="generate_analysis"]
+[connection signal="pressed" from="EvaluateManual" to="ManualSlashDetector" method="_on_evalute_manual_pressed"]
+[connection signal="pressed" from="Genetic" to="GeneticVelocityEvaluator" method="run"]
