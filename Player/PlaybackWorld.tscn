@@ -8,6 +8,11 @@
 [ext_resource type="Resource" uid="uid://k8d8m1cqmke3" path="res://Recording/Recordings/recording_t1.tres" id="6_oqb4a"]
 [ext_resource type="Script" uid="uid://jetxc6eghcm1" path="res://Analysis/AnalysisTool.gd" id="7_mvc0x"]
 [ext_resource type="Script" uid="uid://boed3v88o7puo" path="res://Utility/trail_renderer.gd" id="7_www4e"]
+[ext_resource type="Script" uid="uid://cnkfru2wd75sb" path="res://Recording/LiveRecorder.gd" id="9_0bmy0"]
+[ext_resource type="AudioStream" uid="uid://c3u3otfuhscbx" path="res://Utility/confirmation_001.ogg" id="10_gacmd"]
+[ext_resource type="Script" uid="uid://4px7o56m1q0f" path="res://Utility/AudioSignalResponder.gd" id="11_huif0"]
+[ext_resource type="AudioStream" uid="uid://dvvei2q20g1lr" path="res://Utility/bong_001.ogg" id="12_ts8yv"]
+[ext_resource type="PackedScene" uid="uid://dypo7ljc2kmog" path="res://Effects/live_slash_effect.tscn" id="13_huif0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mvc0x"]
 albedo_texture = ExtResource("1_www4e")
@@ -143,6 +148,26 @@ unique_name_in_owner = true
 material_override = SubResource("StandardMaterial3D_www4e")
 script = ExtResource("7_www4e")
 
+[node name="LiveRecorder" type="Node" parent="." unique_id=363443441 node_paths=PackedStringArray("hand", "tip", "head")]
+script = ExtResource("9_0bmy0")
+hand = NodePath("../PlaybackPlayer/RightHand/RecordingComponent")
+tip = NodePath("../PlaybackPlayer/RightHand/Sword/SwordTip/RecordingComponent")
+head = NodePath("../PlaybackPlayer/XRCamera3D/RecordingComponent")
+metadata/_custom_type_script = "uid://cnkfru2wd75sb"
+
+[node name="SwingSound" type="AudioStreamPlayer" parent="." unique_id=979559962]
+stream = ExtResource("10_gacmd")
+script = ExtResource("11_huif0")
+
+[node name="SwingEndSound" type="AudioStreamPlayer" parent="." unique_id=1832822946]
+stream = ExtResource("12_ts8yv")
+script = ExtResource("11_huif0")
+
+[node name="LiveSlashEffect" parent="." unique_id=78694556 node_paths=PackedStringArray("recorder") instance=ExtResource("13_huif0")]
+recorder = NodePath("../LiveRecorder")
+
 [connection signal="drag_ended" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_drag_ended"]
 [connection signal="drag_started" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_drag_started"]
 [connection signal="value_changed" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_value_changed"]
+[connection signal="slash_ended" from="LiveRecorder" to="SwingEndSound" method="_on_signal"]
+[connection signal="slash_started" from="LiveRecorder" to="SwingSound" method="_on_signal"]

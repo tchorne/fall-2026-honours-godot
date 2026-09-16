@@ -28,32 +28,36 @@ func _init(hand_threshold := 0.0, tip_threshold := 0.0, vel_dot_forward_max := 1
 func _to_string() -> String:
 	return "VelocityEvaluator(%0.2f, %0.2f, %0.2f, %0.2f)" % [_hand_threshold, _tip_threshold, _vel_dot_forward_max, _hold_velocity_threshold]
 
+func reset() -> void:
+	_in_slash = false
+	_current_slash_starting_tip_velocity = Vector3.ZERO
+	_current_slash_starting_hand_velocity = Vector3.ZERO
+
+func process_frame(frame: AnalysisFrame) -> SlashInfo:
+	var result := SlashInfo.NONE
+	if not _in_slash:
+		if frame.tip_velocity.length() >= _tip_threshold \
+			and frame.hilt_velocity.length() >= _hand_threshold \
+			and abs(frame.tip_velocity.normalized().dot(frame.look_direction)) <= _vel_dot_forward_max:
+			result = SlashInfo.STARTED
+			_in_slash = true
+			_current_slash_starting_tip_velocity = frame.tip_velocity
+			_current_slash_starting_hand_velocity = frame.hilt_velocity
+	elif (frame.tip_velocity.length() < _current_slash_starting_tip_velocity.length() * _hold_velocity_threshold \
+		or frame.hilt_velocity.length() < _current_slash_starting_hand_velocity.length() * _hold_velocity_threshold):
+		_in_slash = false
+		result = SlashInfo.ENDED
+	return result
+
+func is_slashing() -> bool:
+	return _in_slash
+
 func get_slashes(analysis: DemoRecordingAnalysis) -> Array[SlashInfo]:
-	
-	
+	reset()
 	var out : Array[SlashInfo] = []
 	
 	for frame in analysis.frames:
-		var result := SlashInfo.NONE
-		if not _in_slash:
-			if frame.tip_velocity.length() < _tip_threshold: pass
-			elif frame.hilt_velocity.length() < _hand_threshold: pass
-			elif abs(frame.tip_velocity.normalized().dot(frame.look_direction)) > _vel_dot_forward_max: pass
-			else:
-				result = SlashInfo.STARTED
-				_in_slash = true
-				_current_slash_starting_tip_velocity = frame.tip_velocity
-				_current_slash_starting_hand_velocity = frame.hilt_velocity
-		elif _in_slash:
-			var effective_tip_velocity := frame.tip_velocity
-			var effective_hand_velocity := frame.hilt_velocity
-
-			if (effective_tip_velocity.length() < _current_slash_starting_tip_velocity.length() * _hold_velocity_threshold 
-				or effective_hand_velocity.length() < _current_slash_starting_hand_velocity.length() * _hold_velocity_threshold):
-				_in_slash = false
-				result = SlashInfo.ENDED
-
-		out.append(result)
+		out.append(process_frame(frame))
 	return out
 
 func mutate(child_count: int, step_size: float = 1.0) -> Array[VelocityEvaluator]:

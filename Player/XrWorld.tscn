@@ -6,6 +6,11 @@
 [ext_resource type="Script" uid="uid://2b0r6jqxukt4" path="res://Utility/LogDisplay.gd" id="2_sh4lu"]
 [ext_resource type="Script" uid="uid://bgnm3uyf571ef" path="res://Recording/DemoRecorder.gd" id="5_ovva8"]
 [ext_resource type="Script" uid="uid://bbx0orgysktjg" path="res://Player/xr_setup.gd" id="6_dddrg"]
+[ext_resource type="Script" uid="uid://cnkfru2wd75sb" path="res://Recording/LiveRecorder.gd" id="7_liverecorder"]
+[ext_resource type="AudioStream" uid="uid://c3u3otfuhscbx" path="res://Utility/confirmation_001.ogg" id="8_361mn"]
+[ext_resource type="AudioStream" uid="uid://dvvei2q20g1lr" path="res://Utility/bong_001.ogg" id="9_1y3f6"]
+[ext_resource type="Script" uid="uid://4px7o56m1q0f" path="res://Utility/AudioSignalResponder.gd" id="9_gilsr"]
+[ext_resource type="PackedScene" uid="uid://dypo7ljc2kmog" path="res://Effects/live_slash_effect.tscn" id="11_gilsr"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ton8o"]
 albedo_texture = ExtResource("1_dddrg")
@@ -99,8 +104,27 @@ sample_rate = 60
 recording_components = [NodePath("../XROrigin3D/XRCamera3D/RecordingComponent"), NodePath("../XROrigin3D/LeftHand/RecordingComponent"), NodePath("../XROrigin3D/RightHand/RecordingComponent"), NodePath("../XROrigin3D/RightHand/Sword/SwordTip/RecordingComponent")]
 recording_file_path = "res://Recording/Recordings/recording_t1.tres"
 
+[node name="LiveRecorder" type="Node" parent="." unique_id=170774478 node_paths=PackedStringArray("hand", "tip", "head")]
+script = ExtResource("7_liverecorder")
+hand = NodePath("../XROrigin3D/RightHand/RecordingComponent")
+tip = NodePath("../XROrigin3D/RightHand/Sword/SwordTip/RecordingComponent")
+head = NodePath("../XROrigin3D/XRCamera3D/RecordingComponent")
+
 [node name="XRSetup" type="Node3D" parent="." unique_id=1539770447]
 script = ExtResource("6_dddrg")
 
+[node name="SwingSound" type="AudioStreamPlayer" parent="." unique_id=1667594374]
+stream = ExtResource("8_361mn")
+script = ExtResource("9_gilsr")
+
+[node name="SwingEndSound" type="AudioStreamPlayer" parent="." unique_id=918184818]
+stream = ExtResource("9_1y3f6")
+script = ExtResource("9_gilsr")
+
+[node name="LiveSlashEffect" parent="." unique_id=78694556 node_paths=PackedStringArray("recorder") instance=ExtResource("11_gilsr")]
+recorder = NodePath("../LiveRecorder")
+
 [connection signal="button_pressed" from="XROrigin3D/RightHand" to="Recorder" method="_on_right_hand_button_pressed"]
 [connection signal="button_released" from="XROrigin3D/RightHand" to="Recorder" method="_on_right_hand_button_released"]
+[connection signal="slash_ended" from="LiveRecorder" to="SwingEndSound" method="_on_signal"]
+[connection signal="slash_started" from="LiveRecorder" to="SwingSound" method="_on_signal"]

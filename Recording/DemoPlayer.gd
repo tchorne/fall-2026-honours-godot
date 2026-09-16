@@ -63,7 +63,7 @@ func _process(delta: float) -> void:
 
 
 func _on_label_passed(label: RecordedLabel, reversing := false):
-	LoggerGlobal.info("Passed Label: %s" % [label.label])
+	#LoggerGlobal.info("Passed Label: %s" % [label.label])
 	if label.label == "slash_started":
 		is_slicing = not reversing
 	elif label.label == "slash_ended":

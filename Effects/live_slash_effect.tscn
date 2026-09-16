@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://dypo7ljc2kmog"]
+
+[ext_resource type="Script" uid="uid://bgx86ryftk4hj" path="res://Effects/live_slash_effect.gd" id="1_k60w1"]
+[ext_resource type="Script" uid="uid://3uh5ps6862q4" path="res://CurveFitting/SlashCurveMeshBuilder.gd" id="2_o1r0x"]
+[ext_resource type="Material" uid="uid://bi26rne71gldr" path="res://Effects/SlashDebugVisualMat.tres" id="3_k60w1"]
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_huif0"]
+
+[node name="LiveSlashEffect" type="Node3D" unique_id=78694556]
+script = ExtResource("1_k60w1")
+
+[node name="SlashCurveMeshBuilder" type="Node" parent="." unique_id=495263817]
+script = ExtResource("2_o1r0x")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2046017166]
+material_override = ExtResource("3_k60w1")
+mesh = SubResource("ImmediateMesh_huif0")

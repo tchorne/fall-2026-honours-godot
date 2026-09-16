@@ -89,14 +89,9 @@ tip_threshold = 16.0
 
 [node name="GeneticVelocityEvaluator" type="Node" parent="." unique_id=1875515760]
 script = ExtResource("3_o8jwe")
-population_size = 10
+population_size = 20
 generations = 20
-top_n = 1
-initial_step_size = 0.01
-starting_hand_threshold = 5.09
-starting_tip_threshold = 15.36
-starting_vel_dot_forward_max = 10.04
-starting_hold_velocity_threshold = 0.52
+initial_step_size = 200.0
 
 [connection signal="pressed" from="Button" to="Analysis" method="generate_analysis"]
 [connection signal="pressed" from="EvaluateManual" to="ManualSlashDetector" method="_on_evalute_manual_pressed"]
