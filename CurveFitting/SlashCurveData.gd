@@ -13,8 +13,18 @@ var complete := false
 func add_frame(frame: Frame):
 	frames.append(frame)
 
+func Clone(up_to_frame: int) -> SlashCurveData:
+	var new_frame := SlashCurveData.new()
+	new_frame.start_time = start_time
+	new_frame.complete = up_to_frame >= frames.size()
+	for i in range(up_to_frame):
+		new_frame.add_frame(frames[i])
+	return new_frame
+
 class Frame:
 	var analysis_frame: AnalysisFrame
 	var tip_position: Vector3
 	var hand_position: Vector3
 	var time: float
+
+	

@@ -20,7 +20,7 @@ func _process(_delta: float) -> void:
 	
 	if data:
 		mesh_instance_3d.visible = true
-		slash_curve_mesh_builder.generate_triangle_strip(mesh_instance_3d.mesh as ImmediateMesh, LineSegmentCurve.create(data))
+		slash_curve_mesh_builder.generate_extruded_eye(mesh_instance_3d.mesh as ImmediateMesh, LineSegmentCurve.create(data))
 	else:
 		mesh_instance_3d.visible = false
 		

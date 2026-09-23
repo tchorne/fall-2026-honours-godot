@@ -11,3 +11,9 @@ func sample_point(t: float) -> SampleData
 class SampleData:
 	var tip_position: Vector3
 	var hilt_position: Vector3
+	
+	func midpoint() -> Vector3:
+		return (tip_position + hilt_position) * 0.5
+	
+	func hilt_to_tip()-> Vector3:
+		return (tip_position - hilt_position).normalized()

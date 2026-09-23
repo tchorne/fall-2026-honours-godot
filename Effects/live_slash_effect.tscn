@@ -11,6 +11,7 @@ script = ExtResource("1_k60w1")
 
 [node name="SlashCurveMeshBuilder" type="Node" parent="." unique_id=495263817]
 script = ExtResource("2_o1r0x")
+resolution = 25
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2046017166]
 material_override = ExtResource("3_k60w1")
