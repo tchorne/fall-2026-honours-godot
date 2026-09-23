@@ -23,30 +23,30 @@ func generate_triangle_strip(mesh: ImmediateMesh, curve: SlashCurve) -> void:
 	
 	
 ## Adds triangles (a.a, a.b, b.a) and (a.b, b.b, b.a)
-func add_quad(mesh: ImmediateMesh, a: Edge, b: Edge, x0: float, x1: float) -> void:
+func add_quad(mesh: SurfaceTool, a: Edge, b: Edge, x0: float, x1: float) -> void:
 	
-	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
-	mesh.surface_set_uv(Vector2(x0, a.ta))
-	mesh.surface_add_vertex(a.a)
-	mesh.surface_set_uv(Vector2(x0, a.tb))
-	mesh.surface_add_vertex(a.b)
-	mesh.surface_set_uv(Vector2(x1, b.ta))
-	mesh.surface_add_vertex(b.a)
-	mesh.surface_end()
+	#mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
+	mesh.set_uv(Vector2(x0, a.ta))
+	mesh.add_vertex(a.a)
+	mesh.set_uv(Vector2(x0, a.tb))
+	mesh.add_vertex(a.b)
+	mesh.set_uv(Vector2(x1, b.ta))
+	mesh.add_vertex(b.a)
+	#mesh.surface_end()
 	
-	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
-	mesh.surface_set_uv(Vector2(x0, a.tb))
-	mesh.surface_add_vertex(a.b)
-	mesh.surface_set_uv(Vector2(x1, b.tb))
-	mesh.surface_add_vertex(b.b)
-	mesh.surface_set_uv(Vector2(x1, b.ta))
-	mesh.surface_add_vertex(b.a)
-	mesh.surface_end()
+	#mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
+	mesh.set_uv(Vector2(x0, a.tb))
+	mesh.add_vertex(a.b)
+	mesh.set_uv(Vector2(x1, b.tb))
+	mesh.add_vertex(b.b)
+	mesh.set_uv(Vector2(x1, b.ta))
+	mesh.add_vertex(b.a)
+	#mesh.surface_end()
 
 ## 
-func generate_extruded_eye(mesh: ImmediateMesh, curve: SlashCurve) -> void:
-	mesh.clear_surfaces()
-	
+func generate_extruded_eye(curve: SlashCurve) -> ArrayMesh:
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var previous_eye: Array[Edge] = []
 	
 	
@@ -54,12 +54,12 @@ func generate_extruded_eye(mesh: ImmediateMesh, curve: SlashCurve) -> void:
 	
 	for i in range(1, resolution-1):
 		var t := float(i) / resolution
-		var next_t := float(i) / resolution
+		var next_t := float(i+1) / resolution
 		
 		var sample := curve.sample_point(t)
 		var forward := curve.sample_point(next_t).midpoint() - sample.midpoint()
+		if (forward.length_squared() == 0): continue
 		forward = forward.normalized()
-		
 		var up := forward.cross(sample.hilt_to_tip())
 		
 		var first_vertex := sample.hilt_position
@@ -69,6 +69,8 @@ func generate_extruded_eye(mesh: ImmediateMesh, curve: SlashCurve) -> void:
 		
 		var first_j := true
 		var prev_j := 0.0
+		var upper_edge : Edge
+		var lower_edge : Edge
 		
 		for j in MyMath.n_points_between(0, 1, 5).slice(1, 5-1):
 			# Used some desmos to get this eye-shaped curve from 0-1
@@ -78,27 +80,35 @@ func generate_extruded_eye(mesh: ImmediateMesh, curve: SlashCurve) -> void:
 			var lower_point = lerp(first_vertex, last_vertex, j) - up * height_off_curve
 			
 			if first_j:
-				edges.append(Edge.new(first_vertex, upper_point, 0, j))
-				edges.append(Edge.new(first_vertex, lower_point, 0, j))
+				upper_edge = Edge.new(first_vertex, upper_point, 0, j)
+				lower_edge = Edge.new(first_vertex, lower_point, 0, j)
+				edges.append(upper_edge)
+				edges.append(lower_edge)
 				first_j = false
 			else:
-				edges.append(Edge.new(edges[-2].b, upper_point, prev_j, j))
-				edges.append(Edge.new(edges[-2].b, lower_point, prev_j, j))
+				upper_edge = Edge.new(upper_edge.b, upper_point, prev_j, j)
+				lower_edge = Edge.new(lower_edge.b, lower_point, prev_j, j)
+				edges.append(upper_edge)
+				edges.append(lower_edge)
 			prev_j = j
 		
 		# connect last 2 to last vertex
-		edges.append(Edge.new(edges[-2].b, last_vertex, prev_j, 1))
-		edges.append(Edge.new(edges[-2].b, last_vertex, prev_j, 1))
+		edges.append(Edge.new(upper_edge.b, last_vertex, prev_j, 1))
+		edges.append(Edge.new(lower_edge.b, last_vertex, prev_j, 1))
 		
 		# Connect this eye to the previous, if it exists
 		if previous_eye:
 			for j in previous_eye.size():
 				var edge_a := previous_eye[j]
 				var edge_b := edges[j]
-				add_quad(mesh, edge_a, edge_b, t, next_t)
+				add_quad(st, edge_a, edge_b, t, next_t)
 		
 		previous_eye = edges
-		
+	
+	st.index()
+	return st.commit()
+
+
 			
 class Edge:
 	var a: Vector3

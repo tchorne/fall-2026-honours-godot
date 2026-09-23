@@ -13,6 +13,17 @@ static func create(data: SlashCurveData) -> LineSegmentCurve:
 	
 	return curve
 
+
+
+
+## Gives a copy of this curve with a fraction of the number of points, by taking every k'th point.
+func simplify(skip: int) -> LineSegmentCurve:
+	var new_curve := LineSegmentCurve.new()
+	for i in range(0, hand_points.size(), skip):
+		new_curve.hand_points.append(hand_points[i])
+		new_curve.tip_points.append(tip_points[i])
+	return new_curve
+
 func sample_point(t: float) -> SampleData:
 	var out := SampleData.new()
 	

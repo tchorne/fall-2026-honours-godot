@@ -18,9 +18,9 @@ func _process(_delta: float) -> void:
 	elif recorder.previous_slash_data != null:
 		data = recorder.previous_slash_data
 	
-	if data:
+	if data and data.frames.size() > 4:
 		mesh_instance_3d.visible = true
-		slash_curve_mesh_builder.generate_extruded_eye(mesh_instance_3d.mesh as ImmediateMesh, LineSegmentCurve.create(data))
+		mesh_instance_3d.mesh = slash_curve_mesh_builder.generate_extruded_eye(SingleFitBezierCurve.create(data))
 	else:
 		mesh_instance_3d.visible = false
 		

@@ -1,0 +1,13 @@
+bezier_least_squares_fit.gd was done by Claude. I started trying to do it myself, 
+but quickly found that without an actual matrix library (none of which seem to exist for GDScript) this would be a huge pain.
+There also may have been some typos in that blog post?
+
+It then did the 2D version which I copy-pasted into the 3d version where I went through and replaced it with the 3D equivalent
+
+--- Prompt ---
+Write a script in GDScript that implements the following algorithm
+https://www.jimherold.com/computer-science/best-fit-bezier-curve
+https://sourceforge.net/p/lsbezier/code/HEAD/tree/LeastSquaresBezier/src/BezierFit.java
+
+Note that GDScript has very little support for generic matrix math, but you can build off the Projection datatype which does 4x4 matrix and vector multiplication
+--------------
