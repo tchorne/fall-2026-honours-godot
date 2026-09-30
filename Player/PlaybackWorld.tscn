@@ -12,7 +12,7 @@
 [ext_resource type="AudioStream" uid="uid://c3u3otfuhscbx" path="res://Utility/confirmation_001.ogg" id="10_gacmd"]
 [ext_resource type="Script" uid="uid://4px7o56m1q0f" path="res://Utility/AudioSignalResponder.gd" id="11_huif0"]
 [ext_resource type="AudioStream" uid="uid://dvvei2q20g1lr" path="res://Utility/bong_001.ogg" id="12_ts8yv"]
-[ext_resource type="PackedScene" uid="uid://dypo7ljc2kmog" path="res://Effects/live_slash_effect.tscn" id="13_huif0"]
+[ext_resource type="Script" uid="uid://ddm7dk4l61n05" path="res://Effects/live_slash_effect_generator.gd" id="13_huif0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mvc0x"]
 albedo_texture = ExtResource("1_www4e")
@@ -163,7 +163,8 @@ script = ExtResource("11_huif0")
 stream = ExtResource("12_ts8yv")
 script = ExtResource("11_huif0")
 
-[node name="LiveSlashEffect" parent="." unique_id=78694556 node_paths=PackedStringArray("recorder") instance=ExtResource("13_huif0")]
+[node name="LiveSlashEffectGenerator" type="Node" parent="." unique_id=956539969 node_paths=PackedStringArray("recorder")]
+script = ExtResource("13_huif0")
 recorder = NodePath("../LiveRecorder")
 
 [connection signal="drag_ended" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_drag_ended"]

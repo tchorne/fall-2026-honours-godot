@@ -5,6 +5,7 @@ extends Node
 
 @onready var timeline: HSlider = %Timeline
 @onready var trail_renderer: MultiMeshInstance3D = %TrailRenderer
+@onready var live_slash_effect_generator: Node = $"../LiveSlashEffectGenerator"
 
 var is_playing := false
 var is_slicing := false
@@ -33,6 +34,7 @@ func _ready():
 	LoggerGlobal.add_stat("Is Slashing", func(): return is_slicing)
 
 func _process(delta: float) -> void:
+	live_slash_effect_generator.process_mode = Node.PROCESS_MODE_INHERIT if not paused else Node.PROCESS_MODE_DISABLED
 	if not is_playing: return
 	if not paused and not scrubbing:
 		elapsed_time += delta

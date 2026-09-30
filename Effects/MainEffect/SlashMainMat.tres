@@ -1,0 +1,22 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://b5wjdckcrvcfl"]
+
+[ext_resource type="Shader" uid="uid://c8a7xnth6sj3r" path="res://Effects/MainEffect/SlashMain.tres" id="1_ljdbj"]
+[ext_resource type="Texture2D" uid="uid://d1l8puum5inl8" path="res://Effects/MainEffect/Base.png" id="2_h67sj"]
+[ext_resource type="Texture2D" uid="uid://cfi7mfhotgunn" path="res://Effects/MainEffect/Highlight.png" id="3_uw1ve"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_srujv"]
+frequency = 0.0189
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_abya6"]
+noise = SubResource("FastNoiseLite_srujv")
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_ljdbj")
+shader_parameter/ErodeTex = SubResource("NoiseTexture2D_abya6")
+shader_parameter/ErodeTime = 0.59918576
+shader_parameter/SwordUV = 1.0109563
+shader_parameter/Highlight = ExtResource("3_uw1ve")
+shader_parameter/HighlightColor = Color(0.34237343, 1.353256, 1, 1)
+shader_parameter/Base = ExtResource("2_h67sj")
+shader_parameter/BaseColor = Color(0.090981476, 0.29165652, 0.3124184, 1)

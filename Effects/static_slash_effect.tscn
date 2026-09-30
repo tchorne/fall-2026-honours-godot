@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://dyqua86gjug0y"]
+
+[ext_resource type="Material" uid="uid://b5wjdckcrvcfl" path="res://Effects/MainEffect/SlashMainMat.tres" id="1_r8gc1"]
+
+[sub_resource type="Environment" id="Environment_4lwy2"]
+
+[sub_resource type="Curve" id="Curve_thdb7"]
+_data = [Vector2(0.5010799, 0.63492066), 0.0, 0.0, 0, 0]
+point_count = 1
+
+[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_4lwy2"]
+shape = 0
+size = 4.361
+curve = SubResource("Curve_thdb7")
+
+[sub_resource type="Animation" id="Animation_mifga"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:material_override:shader_parameter/ErodeTime")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D:material_override:shader_parameter/SwordUV")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_r8gc1"]
+resource_name = "manual_slash"
+loop_mode = 1
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MeshInstance3D:material_override:shader_parameter/ErodeTime")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 2, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, -0.0021165977, 0, 0, 0, 0, 0.96371794, 0, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.33333334, 1)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MeshInstance3D:material_override:shader_parameter/SwordUV")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0),
+"points": PackedFloat32Array(0, -0.5, 0.16666667, 0, 0, 0.8880803, -0.13333334, -0.22691292, 0.26666665, 0.13963872, 1.0102642, -0.47777778, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.2, 1)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_xc72n"]
+_data = {
+&"RESET": SubResource("Animation_mifga"),
+&"manual_slash": SubResource("Animation_r8gc1")
+}
+
+[node name="StaticSlashEffect" type="Node3D" unique_id=1226206207]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=888373182]
+environment = SubResource("Environment_4lwy2")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=406061113]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0)
+material_override = ExtResource("1_r8gc1")
+mesh = SubResource("RibbonTrailMesh_4lwy2")
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1230144179]
+transform = Transform3D(1, 0, 0, 0, 0.52433723, 0.8515107, 0, -0.8515107, 0.52433723, 0, 1.0154752, 0.9271381)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=326455870]
+libraries/ = SubResource("AnimationLibrary_xc72n")

@@ -46,14 +46,15 @@ func _process(delta: float) -> void:
 	frame.look_direction = _head_rotations[current_index] * Vector3.FORWARD
 	_last_result = evaluator.process_frame(frame)
 	if _last_result == VelocityEvaluator.SlashInfo.STARTED:
-		slash_started.emit()
 		current_slash_data = SlashCurveData.new()
 		current_slash_data.start_time = Time.get_ticks_msec()
+		slash_started.emit()
 		
 	elif _last_result == VelocityEvaluator.SlashInfo.ENDED:
-		slash_ended.emit()
 		previous_slash_data = current_slash_data
+		previous_slash_data.complete = true
 		current_slash_data = null
+		slash_ended.emit()
 	
 	if is_slashing():
 		var data_frame := SlashCurveData.Frame.new()

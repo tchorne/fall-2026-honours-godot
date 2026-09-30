@@ -1,31 +1,32 @@
 extends Node3D
 
 const SlashCurveMeshBuilder = preload("uid://3uh5ps6862q4")
+const SLASH_MAIN_MAT = preload("uid://b5wjdckcrvcfl")
 
 
-@export var recorder: LiveRecorder
+
 @onready var slash_curve_mesh_builder: SlashCurveMeshBuilder = $SlashCurveMeshBuilder
 @onready var mesh_instance_3d: MeshInstance3D = $MeshInstance3D
+@onready var live_slash_parameter_controller: LiveSlashParameterController = $LiveSlashParameterController
 
-func _ready():
-	recorder.slash_started.connect(_on_recorder_slash_started)
-	recorder.slash_ended.connect(_on_recorder_slash_ended)
+var my_mat : ShaderMaterial
+var data: SlashCurveData
 
-func _process(_delta: float) -> void:
-	var data: SlashCurveData = null
-	if recorder.current_slash_data != null:
-		data = recorder.current_slash_data
-	elif recorder.previous_slash_data != null:
-		data = recorder.previous_slash_data
-	
+func set_data(data_: SlashCurveData):
+	my_mat = SLASH_MAIN_MAT.duplicate()
+	mesh_instance_3d.material_override = my_mat
+	live_slash_parameter_controller.my_material = my_mat
+	data = data_
+
+func _process(delta: float) -> void:
 	if data and data.frames.size() > 4:
 		mesh_instance_3d.visible = true
 		mesh_instance_3d.mesh = slash_curve_mesh_builder.generate_extruded_eye(SingleFitBezierCurve.create(data))
+		
+		var progress = 1.0 if data.complete else 1.0
+		live_slash_parameter_controller.update_material(progress, data.complete, delta)
 	else:
 		mesh_instance_3d.visible = false
 		
-func _on_recorder_slash_started():
-	pass
-
-func _on_recorder_slash_ended():
-	pass
+func _on_live_slash_parameter_controller_fully_faded_out() -> void:
+	queue_free()
