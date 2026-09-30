@@ -43,8 +43,7 @@ func add_quad(mesh: SurfaceTool, a: Edge, b: Edge, x0: float, x1: float) -> void
 	mesh.add_vertex(b.a)
 	#mesh.surface_end()
 
-## 
-func generate_extruded_eye(curve: SlashCurve) -> ArrayMesh:
+func generate_extruded_eye(curve: SlashCurve, end_uv: float) -> ArrayMesh:
 	var st := SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var previous_eye: Array[Edge] = []
@@ -101,7 +100,7 @@ func generate_extruded_eye(curve: SlashCurve) -> ArrayMesh:
 			for j in previous_eye.size():
 				var edge_a := previous_eye[j]
 				var edge_b := edges[j]
-				add_quad(st, edge_a, edge_b, t, next_t)
+				add_quad(st, edge_a, edge_b, t * end_uv, next_t * end_uv)
 		
 		previous_eye = edges
 	

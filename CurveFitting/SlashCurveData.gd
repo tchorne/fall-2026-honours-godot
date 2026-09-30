@@ -4,7 +4,7 @@ extends Object
 ## Instances can be either complete or incomplete
 ## We can fit curves to complete or incomplete slashes and evaluate them against complete ones
 
-const MAX_LENGTH = 3.0
+const MAX_LENGTH = 15.0
 
 var frames: Array[Frame]
 var start_time: float

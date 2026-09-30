@@ -31,6 +31,16 @@ ambient_light_color = Color(1, 1, 1, 1)
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_www4e"]
 albedo_color = Color(1, 0, 0, 1)
 
+[sub_resource type="GDScript" id="GDScript_4lwy2"]
+resource_name = "TimeManagerSetter"
+script/source = "extends Node
+
+@export var game_speed: float = 1.0
+
+func _process(delta: float) -> void:
+	TimeManager.game_speed = game_speed
+"
+
 [node name="PlaybackWorld" type="Node3D" unique_id=204854119]
 
 [node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=882435044]
@@ -166,6 +176,9 @@ script = ExtResource("11_huif0")
 [node name="LiveSlashEffectGenerator" type="Node" parent="." unique_id=956539969 node_paths=PackedStringArray("recorder")]
 script = ExtResource("13_huif0")
 recorder = NodePath("../LiveRecorder")
+
+[node name="TimeManagerSetter" type="Node" parent="." unique_id=921438693]
+script = SubResource("GDScript_4lwy2")
 
 [connection signal="drag_ended" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_drag_ended"]
 [connection signal="drag_started" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_drag_started"]

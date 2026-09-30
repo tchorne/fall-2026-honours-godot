@@ -2,11 +2,11 @@ extends Node
 
 @export var recording_components : Array[RecordingComponent]
 @export var current_recording : DemoRecording
+@export var interpolate := false
 
 @onready var timeline: HSlider = %Timeline
 @onready var trail_renderer: MultiMeshInstance3D = %TrailRenderer
 @onready var live_slash_effect_generator: Node = $"../LiveSlashEffectGenerator"
-
 var is_playing := false
 var is_slicing := false
 var time_since_last_sample := 0.0
@@ -37,19 +37,29 @@ func _process(delta: float) -> void:
 	live_slash_effect_generator.process_mode = Node.PROCESS_MODE_INHERIT if not paused else Node.PROCESS_MODE_DISABLED
 	if not is_playing: return
 	if not paused and not scrubbing:
-		elapsed_time += delta
+		elapsed_time += delta * TimeManager.game_speed
 		timeline.set_value_no_signal(elapsed_time)
 	
 	var current_frame = current_recording.get_index(elapsed_time)
 	
 	for obj in recording_components:
 		if not obj.playback: continue
-		var sample = current_recording.get_sample(obj.recording_name, elapsed_time)
+		var sample = current_recording.get_sample_index(obj.recording_name, current_frame)
+		var next_sample = current_recording.get_sample_index(obj.recording_name, current_frame+1)
+		var remainder = inverse_lerp(current_recording.get_time(current_frame), current_recording.get_time(current_frame+1), elapsed_time)
 		if sample:
 			var pos : Vector3 = sample[0]
 			var rot_vec : Vector4 = sample[1]
 			var rot := Quaternion(rot_vec.x, rot_vec.y, rot_vec.z, rot_vec.w)
-			obj.set_pos_rot(pos, rot)
+			if interpolate:
+				var next_pos : Vector3 = next_sample[0]
+				var next_rot_vec : Vector4 = next_sample[1]
+				var next_rot := Quaternion(next_rot_vec.x, next_rot_vec.y, next_rot_vec.z, next_rot_vec.w)
+				var interp_pos := pos.lerp(next_pos, remainder)
+				var interp_rot := rot.slerp(next_rot, remainder)
+				obj.set_pos_rot(interp_pos, interp_rot)
+			else:
+				obj.set_pos_rot(pos, rot)
 	
 	if is_instance_valid(trail_renderer):
 		trail_renderer.redraw(current_recording.get_many_samples("sword_tip", current_frame-60, current_frame)[0])

@@ -29,14 +29,14 @@ var current_slash_data: SlashCurveData
 var previous_slash_data: SlashCurveData
 
 func _process(delta: float) -> void:
-	_elapsed_time += delta
+	_elapsed_time += delta * TimeManager.game_speed
 	_add_sample()
 	if _sample_times.size() <= velocity_delta:
 		return
 
 	var previous_index := _sample_times.size() - 1 - velocity_delta
 	var current_index := _sample_times.size() - 1
-	var sample_delta := _sample_times[current_index] - _sample_times[previous_index]
+	var sample_delta := (_sample_times[current_index] - _sample_times[previous_index]) / TimeManager.game_speed
 	if sample_delta <= 0.0:
 		return
 

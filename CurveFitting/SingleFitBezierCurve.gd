@@ -32,6 +32,16 @@ static func create(data: SlashCurveData) -> SingleFitBezierCurve:
 	
 	return curve
 
+func get_tip_path_length() -> float:
+	var prev_point := BezierLeastSquaresFit3D.evaluate(control_points, 0)
+	var total_distance := 0.0
+	for i in range(25):
+		var t := (i+1) / 25.0
+		var next_point := BezierLeastSquaresFit3D.evaluate(control_points, t)
+		total_distance += (prev_point - next_point).length()
+		prev_point = next_point
+	return total_distance
+
 func sample_point(t: float) -> SampleData:
 	var out := SampleData.new()
 	
