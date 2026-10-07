@@ -11,6 +11,34 @@
 _data = [Vector2(0, 0), 0.0, 0.27472562, 0, 0, Vector2(1, 1), 2.3547888, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o1r0x"]
+shading_mode = 0
+billboard_mode = 3
+billboard_keep_scale = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id="Curve_o1r0x"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.51627904, 0.9885057), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_5myjq"]
+curve = SubResource("Curve_o1r0x")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_4lwy2"]
+emission_shape_offset = Vector3(-1.965, 0, 0)
+emission_shape_scale = Vector3(2.265, 0.095, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+spread = 0.0
+initial_velocity_min = 1.0
+initial_velocity_max = 5.0
+gravity = Vector3(0, 0, 0)
+scale_curve = SubResource("CurveTexture_5myjq")
+
+[sub_resource type="QuadMesh" id="QuadMesh_15oih"]
+
 [node name="LiveSlashEffect" type="Node3D" unique_id=78694556]
 script = ExtResource("1_k60w1")
 
@@ -26,5 +54,11 @@ mesh = SubResource("ImmediateMesh_huif0")
 script = ExtResource("4_o1r0x")
 erosion_curve = SubResource("Curve_4lwy2")
 metadata/_custom_type_script = "uid://bgrjoiqjg10h0"
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=575962331]
+visible = false
+material_override = SubResource("StandardMaterial3D_o1r0x")
+process_material = SubResource("ParticleProcessMaterial_4lwy2")
+draw_pass_1 = SubResource("QuadMesh_15oih")
 
 [connection signal="fully_faded_out" from="LiveSlashParameterController" to="." method="_on_live_slash_parameter_controller_fully_faded_out"]
