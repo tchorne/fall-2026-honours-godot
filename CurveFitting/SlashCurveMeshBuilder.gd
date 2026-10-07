@@ -23,25 +23,44 @@ func generate_triangle_strip(mesh: ImmediateMesh, curve: SlashCurve) -> void:
 	
 	
 ## Adds triangles (a.a, a.b, b.a) and (a.b, b.b, b.a)
-func add_quad(mesh: SurfaceTool, a: Edge, b: Edge, x0: float, x1: float) -> void:
+func add_quad(mesh: SurfaceTool, a: Edge, b: Edge, x0: float, x1: float, reverse_winding: bool = false) -> void:
 	
-	#mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
-	mesh.set_uv(Vector2(x0, a.ta))
-	mesh.add_vertex(a.a)
-	mesh.set_uv(Vector2(x0, a.tb))
-	mesh.add_vertex(a.b)
-	mesh.set_uv(Vector2(x1, b.ta))
-	mesh.add_vertex(b.a)
-	#mesh.surface_end()
-	
-	#mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
-	mesh.set_uv(Vector2(x0, a.tb))
-	mesh.add_vertex(a.b)
-	mesh.set_uv(Vector2(x1, b.tb))
-	mesh.add_vertex(b.b)
-	mesh.set_uv(Vector2(x1, b.ta))
-	mesh.add_vertex(b.a)
-	#mesh.surface_end()
+	if not reverse_winding:
+		#mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
+		mesh.set_uv(Vector2(x0, a.ta))
+		mesh.add_vertex(a.a)
+		mesh.set_uv(Vector2(x0, a.tb))
+		mesh.add_vertex(a.b)
+		mesh.set_uv(Vector2(x1, b.ta))
+		mesh.add_vertex(b.a)
+		#mesh.surface_end()
+		
+		#mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
+		mesh.set_uv(Vector2(x0, a.tb))
+		mesh.add_vertex(a.b)
+		mesh.set_uv(Vector2(x1, b.tb))
+		mesh.add_vertex(b.b)
+		mesh.set_uv(Vector2(x1, b.ta))
+		mesh.add_vertex(b.a)
+		#mesh.surface_end()
+	else:
+		#mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
+		mesh.set_uv(Vector2(x0, a.ta))
+		mesh.add_vertex(a.a)
+		mesh.set_uv(Vector2(x1, b.ta))
+		mesh.add_vertex(b.a)
+		mesh.set_uv(Vector2(x0, a.tb))
+		mesh.add_vertex(a.b)
+		#mesh.surface_end()
+		
+		#mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLES)
+		mesh.set_uv(Vector2(x0, a.tb))
+		mesh.add_vertex(a.b)
+		mesh.set_uv(Vector2(x1, b.ta))
+		mesh.add_vertex(b.a)
+		mesh.set_uv(Vector2(x1, b.tb))
+		mesh.add_vertex(b.b)
+		#mesh.surface_end()
 
 func generate_extruded_eye(curve: SlashCurve, end_uv: float) -> ArrayMesh:
 	var st := SurfaceTool.new()
@@ -75,32 +94,39 @@ func generate_extruded_eye(curve: SlashCurve, end_uv: float) -> ArrayMesh:
 			# Used some desmos to get this eye-shaped curve from 0-1
 			var height_off_curve : float = (1 - (2*j-1) ** 2) / 13.0
 			
+			# Pinch the edges shut
+			if i == 1 or i == resolution - 2:
+				height_off_curve = 0
+			
 			var upper_point = lerp(first_vertex, last_vertex, j) + up * height_off_curve
 			var lower_point = lerp(first_vertex, last_vertex, j) - up * height_off_curve
 			
 			if first_j:
-				upper_edge = Edge.new(first_vertex, upper_point, 0, j)
-				lower_edge = Edge.new(first_vertex, lower_point, 0, j)
+				upper_edge = Edge.new(first_vertex, upper_point, 1, 1-j)
+				lower_edge = Edge.new(first_vertex, lower_point, 1, 1-j)
 				edges.append(upper_edge)
 				edges.append(lower_edge)
 				first_j = false
 			else:
-				upper_edge = Edge.new(upper_edge.b, upper_point, prev_j, j)
-				lower_edge = Edge.new(lower_edge.b, lower_point, prev_j, j)
+				upper_edge = Edge.new(upper_edge.b, upper_point, 1-prev_j, 1-j)
+				lower_edge = Edge.new(lower_edge.b, lower_point, 1-prev_j, 1-j)
 				edges.append(upper_edge)
 				edges.append(lower_edge)
 			prev_j = j
 		
 		# connect last 2 to last vertex
-		edges.append(Edge.new(upper_edge.b, last_vertex, prev_j, 1))
-		edges.append(Edge.new(lower_edge.b, last_vertex, prev_j, 1))
+		edges.append(Edge.new(upper_edge.b, last_vertex, 1-prev_j, 0))
+		edges.append(Edge.new(lower_edge.b, last_vertex, 1-prev_j, 0))
 		
 		# Connect this eye to the previous, if it exists
 		if previous_eye:
+			var reverse_winding := false
 			for j in previous_eye.size():
 				var edge_a := previous_eye[j]
 				var edge_b := edges[j]
-				add_quad(st, edge_a, edge_b, t * end_uv, next_t * end_uv)
+				add_quad(st, edge_a, edge_b, t * end_uv, next_t * end_uv, reverse_winding)
+				reverse_winding = not reverse_winding
+				# Flips winding direction when alternating upper and lower edges
 		
 		previous_eye = edges
 	

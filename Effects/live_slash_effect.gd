@@ -15,7 +15,7 @@ var data: SlashCurveData
 func set_data(data_: SlashCurveData):
 	my_mat = SLASH_MAIN_MAT.duplicate()
 	# Comment this out to show debug texture
-	#mesh_instance_3d.material_override = my_mat
+	mesh_instance_3d.material_override = my_mat
 	live_slash_parameter_controller.my_material = my_mat
 	data = data_
 
