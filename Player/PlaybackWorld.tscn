@@ -37,7 +37,7 @@ script/source = "extends Node
 
 @export var game_speed: float = 1.0
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	TimeManager.game_speed = game_speed
 "
 
@@ -112,15 +112,13 @@ recording_name = "sword_tip"
 metadata/_custom_type_script = "uid://jrxx8wr0ba2k"
 
 [node name="Label3D" type="Label3D" parent="." unique_id=1401604936]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6216173, 0.96156037, -1.8889782)
-billboard = 2
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.6216173, 0.96156037, -4.347765)
 text = "TESDFSDFSDFsdf"
 vertical_alignment = 2
 script = ExtResource("4_0bmy0")
 
 [node name="Stats" type="Label3D" parent="." unique_id=980030870]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0412028, 0.96156037, -2.0462554)
-billboard = 2
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.0412028, 0.96156037, -4.505042)
 text = "TESDFSDFSDFsdf"
 vertical_alignment = 2
 script = ExtResource("4_0bmy0")
@@ -133,6 +131,7 @@ environment = SubResource("Environment_4lwy2")
 script = ExtResource("5_dm5oq")
 recording_components = [NodePath("../PlaybackPlayer/XRCamera3D/RecordingComponent"), NodePath("../PlaybackPlayer/LeftHand/RecordingComponent"), NodePath("../PlaybackPlayer/RightHand/RecordingComponent"), NodePath("../PlaybackPlayer/RightHand/Sword/SwordTip/RecordingComponent")]
 current_recording = ExtResource("6_oqb4a")
+interpolate = true
 
 [node name="DemoRecordingAnalysis" type="Node" parent="." unique_id=5364303]
 script = ExtResource("7_mvc0x")

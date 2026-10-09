@@ -2,10 +2,13 @@ extends Node
 
 @export var resolution := 100
 
+@export_range(0, 1) var extrapolate_forward
+@export_range(0, 1) var extrapolate_backward
+
 
 func generate_triangle_strip(mesh: ImmediateMesh, curve: SlashCurve) -> void:
 	mesh.clear_surfaces()
-	var last_sample := curve.sample_point(0)
+	var last_sample := curve.sample_point(-extrapolate_backward)
 	mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
 	mesh.surface_set_uv(Vector2(0,0))
 	mesh.surface_add_vertex(last_sample.hilt_position)
@@ -13,7 +16,8 @@ func generate_triangle_strip(mesh: ImmediateMesh, curve: SlashCurve) -> void:
 	mesh.surface_add_vertex(last_sample.tip_position)
 	for i in range(1, resolution):
 		var t := float(i) / resolution
-		var sample := curve.sample_point(t)
+		var curve_t := lerpf(-extrapolate_backward, 1+extrapolate_forward, t)
+		var sample := curve.sample_point(curve_t)
 		mesh.surface_set_uv(Vector2(t,0))
 		mesh.surface_add_vertex(sample.hilt_position)
 		mesh.surface_set_uv(Vector2(t,1))
@@ -74,8 +78,11 @@ func generate_extruded_eye(curve: SlashCurve, end_uv: float) -> ArrayMesh:
 		var t := float(i) / resolution
 		var next_t := float(i+1) / resolution
 		
-		var sample := curve.sample_point(t)
-		var forward := curve.sample_point(next_t).midpoint() - sample.midpoint()
+		var curve_t := lerpf(-extrapolate_backward, 1+extrapolate_forward, t)
+		var next_curve_t := lerpf(-extrapolate_backward, 1+extrapolate_forward, next_t)
+		
+		var sample := curve.sample_point(curve_t)
+		var forward := curve.sample_point(next_curve_t).midpoint() - sample.midpoint()
 		if (forward.length_squared() == 0): continue
 		forward = forward.normalized()
 		var up := forward.cross(sample.hilt_to_tip())
@@ -141,8 +148,8 @@ class Edge:
 	var ta: float
 	var tb: float
 	
-	func _init(a, b, ta, tb) -> void:
-		self.a = a
-		self.b = b
-		self.ta = ta
-		self.tb = tb
+	func _init(a_, b_, ta_, tb_) -> void:
+		self.a = a_
+		self.b = b_
+		self.ta = ta_
+		self.tb = tb_

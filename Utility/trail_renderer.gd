@@ -12,6 +12,6 @@ func redraw(points: PackedVector3Array):
 	multimesh.instance_count = points.size()
 	
 	for i in range(points.size()):
-		var position = points[i]
-		var basis_transform = Transform3D(Basis(), position)
+		var p = points[i]
+		var basis_transform = Transform3D(Basis(), p)
 		multimesh.set_instance_transform(i, basis_transform)

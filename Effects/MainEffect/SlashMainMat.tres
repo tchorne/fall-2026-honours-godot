@@ -13,10 +13,11 @@ noise = SubResource("FastNoiseLite_srujv")
 [resource]
 render_priority = 0
 shader = ExtResource("1_ljdbj")
+shader_parameter/SwordUV = 0.84671116
 shader_parameter/ErodeTex = SubResource("NoiseTexture2D_abya6")
-shader_parameter/ErodeTime = 0.59918576
-shader_parameter/SwordUV = 1.0109563
+shader_parameter/ErodeTime = -0.00043647314
+shader_parameter/RimPower = 0.25000001117647996
 shader_parameter/Highlight = ExtResource("3_uw1ve")
 shader_parameter/HighlightColor = Color(0.34237343, 1.353256, 1, 1)
 shader_parameter/Base = ExtResource("2_h67sj")
-shader_parameter/BaseColor = Color(0.090981476, 0.29165652, 0.3124184, 1)
+shader_parameter/BaseColor = Color(0.08646666, 0.072000004, 0.1, 1)
