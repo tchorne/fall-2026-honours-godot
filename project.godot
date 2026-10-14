@@ -25,6 +25,10 @@ TimeManager="*uid://da2qweyi7py7x"
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
 
+[dotnet]
+
+project/assembly_name="Fall2026HonoursGodot"
+
 [input]
 
 toggle_recording={

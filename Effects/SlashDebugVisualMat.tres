@@ -1,7 +1,9 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://bi26rne71gldr"]
 
 [ext_resource type="Shader" uid="uid://ulfj6lxrtbl0" path="res://Effects/SlashDebugVisual.tres" id="1_v1484"]
+[ext_resource type="Texture2D" uid="uid://43ey6cb7mlfb" path="res://Utility/uv-texture.png" id="2_p8u0y"]
 
 [resource]
 render_priority = 0
 shader = ExtResource("1_v1484")
+shader_parameter/DebugUVTexture = ExtResource("2_p8u0y")

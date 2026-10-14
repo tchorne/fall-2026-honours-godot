@@ -20,11 +20,13 @@ func set_data(data_: SlashCurveData):
 	data = data_
 
 func _process(delta: float) -> void:
-	if data and data.frames.size() > 4:
+	if data and data.frames.size() > 8:
 		mesh_instance_3d.visible = true
-		var fitting_curve := SingleFitBezierCurve.create(data)
-		var end_uv := fitting_curve.get_tip_path_length() / SlashCurveData.MAX_LENGTH
-		mesh_instance_3d.mesh = slash_curve_mesh_builder.generate_extruded_eye(fitting_curve, end_uv)
+		var _fitting_curve := SingleFitBezierCurve.create(data)
+		var circle_fitting_curve := PlaneCircleCurve.create(data)
+		
+		var end_uv := circle_fitting_curve.get_tip_path_length() / SlashCurveData.MAX_LENGTH
+		mesh_instance_3d.mesh = slash_curve_mesh_builder.generate_extruded_eye(circle_fitting_curve, end_uv)
 		
 		var progress = end_uv
 		#LoggerGlobal.trace("Tip path is %f units long" % [fitting_curve.get_tip_path_length()])

@@ -1,4 +1,5 @@
 ## bezier_least_squares_fit.gd
+## WRITTEN BY AI, see prompt.txt
 ##
 ## Closed-form "best fit" cubic Bezier curve fitting via ordinary least
 ## squares -- a GDScript port of the algorithm described by Jim Herold:
