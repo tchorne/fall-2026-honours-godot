@@ -92,7 +92,7 @@ public partial class PlaneCircleFitting : GodotObject
 		// var projected_points = matrix - distances_times_normal;
 
 		var uhat = Vector3.Right.Cross(result.Normal).Normalized();
-		var vhat = uhat.Cross(result.Normal).Normalized(); 
+		var vhat = result.Normal.Cross(uhat).Normalized(); 
 		// v hat (corresponding to y axis) is always to the left of uhat (corresponding to x axis) when looking in the direction of the normal
 		// We're rotating clockwise when viewed from the normal, so we're moving *from* v hat *to* u hat, which is *decreasing* angle in the standard unit circle sense.
 		// I'm starting to doubt my choice of the left hand rule earlier
