@@ -169,9 +169,10 @@ public partial class PlaneCircleFitting : GodotObject
 
 		// Recall that we always want to be moving from vhat to uhat, which is decreasing angle in the standard unit circle sense. 
 		// So we make sure end angle is always less than start angle so we get decreasing values when interpolating.
-		while (result.end_angle > result.start_angle)
+		// Since I wrote the above I fixed a backwards cross product and everything became backwards so this got flipped too
+		while (result.end_angle < result.start_angle)
 		{
-			result.end_angle -= Mathf.Tau;
+			result.end_angle += Mathf.Tau;
 		}
 
 		return result;

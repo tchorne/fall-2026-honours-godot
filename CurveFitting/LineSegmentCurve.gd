@@ -47,3 +47,9 @@ func sample_point(t: float) -> SampleData:
 	out.hilt_position = lerp(hand_points[low_point], hand_points[high_point], lerp_t)
 	out.tip_position = lerp(tip_points[low_point], tip_points[high_point], lerp_t)
 	return out
+
+func get_tip_path_length() -> float:
+	var l := 0.0
+	for i in tip_points.size()-1:
+		l += (tip_points[i]-tip_points[i+1]).length()
+	return l

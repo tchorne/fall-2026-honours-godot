@@ -5,6 +5,7 @@ extends Node
 @export_range(0, 1) var extrapolate_forward
 @export_range(0, 1) var extrapolate_backward
 
+const FLIP_X_UV = false
 
 func generate_triangle_strip(mesh: ImmediateMesh, curve: SlashCurve) -> void:
 	mesh.clear_surfaces()
@@ -25,6 +26,8 @@ func generate_triangle_strip(mesh: ImmediateMesh, curve: SlashCurve) -> void:
 	
 	mesh.surface_end()
 	
+func get_x_uv(x: float) -> float:
+	return 1-x if FLIP_X_UV else x
 	
 ## Adds triangles (a.a, a.b, b.a) and (a.b, b.b, b.a)
 func add_quad(mesh: SurfaceTool, a: Edge, b: Edge, x0: float, x1: float, reverse_winding: bool = false) -> void:
@@ -131,7 +134,7 @@ func generate_extruded_eye(curve: SlashCurve, end_uv: float) -> ArrayMesh:
 			for j in previous_eye.size():
 				var edge_a := previous_eye[j]
 				var edge_b := edges[j]
-				add_quad(st, edge_a, edge_b, t * end_uv, next_t * end_uv, reverse_winding)
+				add_quad(st, edge_a, edge_b, get_x_uv(t * end_uv), get_x_uv(next_t * end_uv), reverse_winding)
 				reverse_winding = not reverse_winding
 				# Flips winding direction when alternating upper and lower edges
 		
