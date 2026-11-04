@@ -1,17 +1,12 @@
 [gd_scene format=3 uid="uid://dyqua86gjug0y"]
 
 [ext_resource type="Material" uid="uid://b5wjdckcrvcfl" path="res://Effects/MainEffect/SlashMainMat.tres" id="1_r8gc1"]
+[ext_resource type="Script" uid="uid://co8xepatmbs74" path="res://Effects/static_slash_effect.gd" id="1_xc72n"]
+[ext_resource type="ArrayMesh" path="res://Recording/Recordings/saved_mesh.tres" id="3_wg5yo"]
+[ext_resource type="Material" uid="uid://bi26rne71gldr" path="res://Effects/SlashDebugVisualMat.tres" id="4_w2i8g"]
+[ext_resource type="Script" uid="uid://bgrjoiqjg10h0" path="res://Effects/MainEffect/live_slash_parameter_controller.gd" id="4_wg5yo"]
 
 [sub_resource type="Environment" id="Environment_4lwy2"]
-
-[sub_resource type="Curve" id="Curve_thdb7"]
-_data = [Vector2(0.5010799, 0.63492066), 0.0, 0.0, 0, 0]
-point_count = 1
-
-[sub_resource type="RibbonTrailMesh" id="RibbonTrailMesh_4lwy2"]
-shape = 0
-size = 4.361
-curve = SubResource("Curve_thdb7")
 
 [sub_resource type="Animation" id="Animation_mifga"]
 length = 0.001
@@ -70,7 +65,22 @@ _data = {
 &"manual_slash": SubResource("Animation_r8gc1")
 }
 
+[sub_resource type="Curve" id="Curve_w2i8g"]
+_data = [Vector2(0, 0), 0.0, 0.27472562, 0, 0, Vector2(1, 1), 2.3547888, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_uw1ve"]
+_limits = [0.0, 6.0, 0.0, 1.0]
+_data = [Vector2(0, 6), 0.0, -13.091552, 0, 0, Vector2(1, 1.0344825), -0.7499368, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_bbnik"]
+_limits = [-0.1, 0.33103454, 0.0, 4.0]
+_data = [Vector2(0, 0.021878779), 0.0, 0.16193981, 0, 0, Vector2(4, 0.31319866), 0.00592917, 0.0, 0, 0]
+point_count = 2
+
 [node name="StaticSlashEffect" type="Node3D" unique_id=1226206207]
+script = ExtResource("1_xc72n")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=888373182]
 environment = SubResource("Environment_4lwy2")
@@ -78,10 +88,45 @@ environment = SubResource("Environment_4lwy2")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=406061113]
 transform = Transform3D(-1, 3.821371e-15, -8.742278e-08, 8.742278e-08, 4.371139e-08, -1, 0, -1, -4.371139e-08, 0, 0, 0)
 material_override = ExtResource("1_r8gc1")
-mesh = SubResource("RibbonTrailMesh_4lwy2")
+mesh = ExtResource("3_wg5yo")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=916988696]
+transform = Transform3D(-1, 3.821371e-15, -8.742278e-08, 8.742278e-08, 4.371139e-08, -1, 0, -1, -4.371139e-08, 0, 0, 0)
+visible = false
+material_override = ExtResource("4_w2i8g")
+mesh = ExtResource("3_wg5yo")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1230144179]
-transform = Transform3D(1, 0, 0, 0, 0.52433723, 0.8515107, 0, -0.8515107, 0.52433723, 0, 1.0154752, 0.9271381)
+transform = Transform3D(1, 0, 0, 0, 0.91348565, 0.40687096, 0, -0.40687096, 0.91348565, 0, 1.0154752, 0.9271381)
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=326455870]
 libraries/ = SubResource("AnimationLibrary_xc72n")
+
+[node name="Controls" type="VBoxContainer" parent="." unique_id=1427066192]
+offset_right = 243.0
+offset_bottom = 40.0
+
+[node name="Progress" type="HSlider" parent="Controls" unique_id=1854066784]
+layout_mode = 2
+max_value = 2.0
+step = 0.0
+
+[node name="Time" type="HSlider" parent="Controls" unique_id=933188047]
+layout_mode = 2
+max_value = 1.0
+step = 0.0
+
+[node name="Stretch" type="HSlider" parent="Controls" unique_id=1371753169]
+layout_mode = 2
+max_value = 6.0
+step = 0.0
+value = 1.0
+
+[node name="LiveSlashParameterController" type="Node" parent="." unique_id=699999889]
+script = ExtResource("4_wg5yo")
+erosion_curve = SubResource("Curve_w2i8g")
+stretch_curve = SubResource("Curve_uw1ve")
+progess_add_with_time = SubResource("Curve_bbnik")
+metadata/_custom_type_script = "uid://bgrjoiqjg10h0"
+
+[connection signal="value_changed" from="Controls/Progress" to="." method="_on_progress_value_changed"]

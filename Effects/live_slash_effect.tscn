@@ -11,6 +11,16 @@
 _data = [Vector2(0, 0), 0.0, 0.27472562, 0, 0, Vector2(1, 1), 2.3547888, 0.0, 0, 0]
 point_count = 2
 
+[sub_resource type="Curve" id="Curve_5myjq"]
+_limits = [0.0, 6.0, 0.0, 1.0]
+_data = [Vector2(0, 6), 0.0, -13.091552, 0, 0, Vector2(1, 1.0344825), -0.7499368, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="Curve" id="Curve_d44ys"]
+_limits = [-0.1, 0.33103454, 0.0, 4.0]
+_data = [Vector2(0, 0.021878779), 0.0, 0.16193981, 0, 0, Vector2(4, 0.31319866), 0.00592917, 0.0, 0, 0]
+point_count = 2
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o1r0x"]
 shading_mode = 0
 billboard_mode = 3
@@ -55,6 +65,8 @@ mesh = SubResource("ImmediateMesh_huif0")
 [node name="LiveSlashParameterController" type="Node" parent="." unique_id=1564868767]
 script = ExtResource("4_o1r0x")
 erosion_curve = SubResource("Curve_4lwy2")
+stretch_curve = SubResource("Curve_5myjq")
+progess_add_with_time = SubResource("Curve_d44ys")
 metadata/_custom_type_script = "uid://bgrjoiqjg10h0"
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="." unique_id=575962331]

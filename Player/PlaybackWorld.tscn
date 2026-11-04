@@ -178,8 +178,14 @@ recorder = NodePath("../LiveRecorder")
 [node name="TimeManagerSetter" type="Node" parent="." unique_id=921438693]
 script = SubResource("GDScript_4lwy2")
 
+[node name="SaveMostRecentCurve" type="Button" parent="." unique_id=1294390846]
+offset_right = 40.0
+offset_bottom = 40.0
+text = "Save Curve"
+
 [connection signal="drag_ended" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_drag_ended"]
 [connection signal="drag_started" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_drag_started"]
 [connection signal="value_changed" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_value_changed"]
 [connection signal="slash_ended" from="LiveRecorder" to="SwingEndSound" method="_on_signal"]
 [connection signal="slash_started" from="LiveRecorder" to="SwingSound" method="_on_signal"]
+[connection signal="pressed" from="SaveMostRecentCurve" to="LiveSlashEffectGenerator" method="_on_save_most_recent_curve_pressed"]

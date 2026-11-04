@@ -19,15 +19,18 @@ func set_data(data_: SlashCurveData):
 	live_slash_parameter_controller.my_material = my_mat
 	data = data_
 
+func save():
+	ResourceSaver.save(mesh_instance_3d.mesh, "Recording/Recordings/saved_mesh.tres")
+
 func _process(delta: float) -> void:
 	if data and data.frames.size() > 8:
 		mesh_instance_3d.visible = true
 		var _fitting_curve := SingleFitBezierCurve.create(data)
 		var circle_fitting_curve := PlaneCircleCurve.create(data)
-		var straight_fitting_curve := LineSegmentCurve.create(data)
+		var _straight_fitting_curve := LineSegmentCurve.create(data)
 		
-		var end_uv := straight_fitting_curve.get_tip_path_length() / SlashCurveData.MAX_LENGTH
-		mesh_instance_3d.mesh = slash_curve_mesh_builder.generate_extruded_eye(straight_fitting_curve, end_uv)
+		var end_uv := circle_fitting_curve.get_tip_path_length() / SlashCurveData.MAX_LENGTH
+		mesh_instance_3d.mesh = slash_curve_mesh_builder.generate_extruded_eye(circle_fitting_curve, end_uv)
 		
 		var progress = end_uv
 		#LoggerGlobal.trace("Tip path is %f units long" % [fitting_curve.get_tip_path_length()])
