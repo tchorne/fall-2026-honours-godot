@@ -52,6 +52,10 @@ pause_recording={
 ]
 }
 
+[layer_names]
+
+3d_physics/layer_2="mouse"
+
 [physics]
 
 common/physics_ticks_per_second=120
