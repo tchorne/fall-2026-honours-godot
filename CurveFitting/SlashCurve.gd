@@ -8,6 +8,9 @@ extends Object
 @abstract
 func sample_point(t: float) -> SampleData
 
+@abstract
+func get_tip_path_length() -> float
+
 class SampleData:
 	var tip_position: Vector3
 	var hilt_position: Vector3
@@ -16,4 +19,8 @@ class SampleData:
 		return (tip_position + hilt_position) * 0.5
 	
 	func hilt_to_tip()-> Vector3:
-		return (tip_position - hilt_position).normalized()
+		var htt = (tip_position - hilt_position)
+		if (not htt.is_finite()): return Vector3.FORWARD
+		if (htt.is_zero_approx()): return Vector3.FORWARD
+		
+		return htt.normalized()

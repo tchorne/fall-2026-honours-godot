@@ -40,6 +40,7 @@ func sample_point(t: float) -> SampleData:
 	var high_point := low_point + 1
 	high_point = min(high_point, hand_points.size()-1)
 	low_point = max(0, low_point)
+	low_point = min(low_point, high_point)
 	
 	
 	var lerp_t := inverse_lerp(low_point, high_point, t * num_points)

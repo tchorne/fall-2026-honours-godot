@@ -153,6 +153,7 @@ step = 0.016
 
 [node name="TrailRenderer" type="MultiMeshInstance3D" parent="." unique_id=819520039]
 unique_name_in_owner = true
+visible = false
 material_override = SubResource("StandardMaterial3D_www4e")
 script = ExtResource("7_www4e")
 

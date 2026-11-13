@@ -1,6 +1,7 @@
 extends Node
 
 @export var resolution := 100
+@export var y_resolution := 5
 
 @export_range(0, 1) var extrapolate_forward
 @export_range(0, 1) var extrapolate_backward
@@ -87,6 +88,7 @@ func generate_extruded_eye(curve: SlashCurve, end_uv: float) -> ArrayMesh:
 		var sample := curve.sample_point(curve_t)
 		var forward := curve.sample_point(next_curve_t).midpoint() - sample.midpoint()
 		if (forward.length_squared() == 0): continue
+		if (not forward.is_finite()): continue
 		forward = forward.normalized()
 		var up := forward.cross(sample.hilt_to_tip())
 		
@@ -100,7 +102,7 @@ func generate_extruded_eye(curve: SlashCurve, end_uv: float) -> ArrayMesh:
 		var upper_edge : Edge
 		var lower_edge : Edge
 		
-		for j in MyMath.n_points_between(0, 1, 5).slice(1, 5-1):
+		for j in MyMath.n_points_between(0, 1, y_resolution).slice(1, y_resolution-1):
 			# Used some desmos to get this eye-shaped curve from 0-1
 			var height_off_curve : float = (1 - (2*j-1) ** 2) / 13.0
 			

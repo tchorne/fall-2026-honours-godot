@@ -14,7 +14,7 @@ signal slash_ended
 @export var hand: RecordingComponent
 @export var tip: RecordingComponent
 @export var head: RecordingComponent
-var evaluator := VelocityEvaluator.new(5.9, 15.36, 10.04, 0.52)
+var evaluator := VelocityEvaluator.new(5.9, 15.36, 10.04, 0.4)
 @export var buffer_size := 120
 @export var velocity_delta := 6
 

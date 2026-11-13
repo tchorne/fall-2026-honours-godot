@@ -29,6 +29,10 @@ window/stretch/aspect="expand"
 
 project/assembly_name="Fall2026HonoursGodot"
 
+[global_group]
+
+CurveType=""
+
 [input]
 
 toggle_recording={

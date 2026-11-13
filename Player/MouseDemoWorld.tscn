@@ -155,5 +155,24 @@ shape = SubResource("BoxShape3D_15oih")
 [node name="MouseController" type="Node3D" parent="." unique_id=15686385]
 script = ExtResource("11_d0eaq")
 
+[node name="Control" type="Control" parent="." unique_id=1586774524]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 187.0
+offset_bottom = 69.0
+
+[node name="CurveType" type="OptionButton" parent="Control" unique_id=321961688 groups=["CurveType"]]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 20.0
+selected = 0
+item_count = 3
+popup/item_0/text = "Bezier"
+popup/item_0/id = 0
+popup/item_1/text = "Circle"
+popup/item_1/id = 1
+popup/item_2/text = "Line Segment"
+popup/item_2/id = 2
+
 [connection signal="slash_ended" from="LiveRecorder" to="SwingEndSound" method="_on_signal"]
 [connection signal="slash_started" from="LiveRecorder" to="SwingSound" method="_on_signal"]

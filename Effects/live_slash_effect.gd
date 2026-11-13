@@ -12,6 +12,8 @@ const SLASH_MAIN_MAT = preload("uid://b5wjdckcrvcfl")
 var my_mat : ShaderMaterial
 var data: SlashCurveData
 
+var curve_type: int = 0
+
 func set_data(data_: SlashCurveData):
 	my_mat = SLASH_MAIN_MAT.duplicate()
 	# Comment this out to show debug texture
@@ -25,18 +27,26 @@ func save():
 func _process(delta: float) -> void:
 	if data and data.frames.size() > 8:
 		mesh_instance_3d.visible = true
-		var _fitting_curve := SingleFitBezierCurve.create(data)
-		var circle_fitting_curve := PlaneCircleCurve.create(data)
-		var _straight_fitting_curve := LineSegmentCurve.create(data)
 		
-		var end_uv := circle_fitting_curve.get_tip_path_length() / SlashCurveData.MAX_LENGTH
-		mesh_instance_3d.mesh = slash_curve_mesh_builder.generate_extruded_eye(circle_fitting_curve, end_uv)
+		var my_curve: SlashCurve = build_curve(data, curve_type)
+		
+		var end_uv := my_curve.get_tip_path_length() / SlashCurveData.MAX_LENGTH
+		mesh_instance_3d.mesh = slash_curve_mesh_builder.generate_extruded_eye(my_curve, end_uv)
 		
 		var progress = end_uv
 		#LoggerGlobal.trace("Tip path is %f units long" % [fitting_curve.get_tip_path_length()])
 		live_slash_parameter_controller.update_material(progress, data.complete, delta)
 	else:
 		mesh_instance_3d.visible = false
-		
+
+func build_curve(d, type) -> SlashCurve:
+	if (type == 0):
+		return SingleFitBezierCurve.create(d)
+	elif (type == 1):
+		return PlaneCircleCurve.create(d)
+	else:
+		return LineSegmentCurve.create(data)
+	
+
 func _on_live_slash_parameter_controller_fully_faded_out() -> void:
 	queue_free()

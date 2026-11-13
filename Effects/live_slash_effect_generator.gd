@@ -13,6 +13,9 @@ func _on_recorder_slash_started():
 	_previous_effect = effect
 	add_child(effect)
 	
+	if (is_instance_valid(get_tree().get_first_node_in_group(&"CurveType"))):
+		effect.curve_type = (get_tree().get_first_node_in_group(&"CurveType") as OptionButton).selected
+	
 	effect.set_data(recorder.current_slash_data)
 
 
