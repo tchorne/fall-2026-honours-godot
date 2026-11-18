@@ -1,4 +1,5 @@
 extends AudioStreamPlayer
 
 func _on_signal():
-	play()
+	#play()
+	pass
