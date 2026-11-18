@@ -9,6 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://c3u3otfuhscbx" path="res://Utility/confirmation_001.ogg" id="10_mkbrx"]
 [ext_resource type="Script" uid="uid://4px7o56m1q0f" path="res://Utility/AudioSignalResponder.gd" id="11_8uxqj"]
 [ext_resource type="Script" uid="uid://bijqt8nlnnkry" path="res://Player/mouse_controller.gd" id="11_d0eaq"]
+[ext_resource type="PackedScene" uid="uid://bj4vxwsl4ryni" path="res://Player/parameter_controls.tscn" id="12_fj43a"]
 [ext_resource type="AudioStream" uid="uid://dvvei2q20g1lr" path="res://Utility/bong_001.ogg" id="12_hou1x"]
 [ext_resource type="Script" uid="uid://ddm7dk4l61n05" path="res://Effects/live_slash_effect_generator.gd" id="13_j0bp7"]
 
@@ -155,24 +156,7 @@ shape = SubResource("BoxShape3D_15oih")
 [node name="MouseController" type="Node3D" parent="." unique_id=15686385]
 script = ExtResource("11_d0eaq")
 
-[node name="Control" type="Control" parent="." unique_id=1586774524]
-layout_mode = 3
-anchors_preset = 0
-offset_right = 187.0
-offset_bottom = 69.0
-
-[node name="CurveType" type="OptionButton" parent="Control" unique_id=321961688 groups=["CurveType"]]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 20.0
-selected = 0
-item_count = 3
-popup/item_0/text = "Bezier"
-popup/item_0/id = 0
-popup/item_1/text = "Circle"
-popup/item_1/id = 1
-popup/item_2/text = "Line Segment"
-popup/item_2/id = 2
+[node name="ParameterControls" parent="." unique_id=1598288897 instance=ExtResource("12_fj43a")]
 
 [connection signal="slash_ended" from="LiveRecorder" to="SwingEndSound" method="_on_signal"]
 [connection signal="slash_started" from="LiveRecorder" to="SwingSound" method="_on_signal"]

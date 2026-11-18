@@ -32,6 +32,8 @@ project/assembly_name="Fall2026HonoursGodot"
 [global_group]
 
 CurveType=""
+SliderAlpha=""
+SliderBeta=""
 
 [input]
 

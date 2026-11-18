@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://bj4vxwsl4ryni"]
+
+[node name="ParameterControls" type="Control" unique_id=1598288897]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 187.0
+offset_bottom = 69.0
+
+[node name="CurveType" type="OptionButton" parent="." unique_id=1448523449 groups=["CurveType"]]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 20.0
+selected = 0
+item_count = 3
+popup/item_0/text = "Bezier"
+popup/item_0/id = 0
+popup/item_1/text = "Circle"
+popup/item_1/id = 1
+popup/item_2/text = "Line Segment"
+popup/item_2/id = 2
+
+[node name="Alpha" type="HSlider" parent="." unique_id=1719987438 groups=["SliderAlpha"]]
+layout_mode = 0
+offset_left = 4.0
+offset_top = 65.0
+offset_right = 242.0
+offset_bottom = 81.0
+max_value = 1.0
+step = 0.05
+value = 0.3
+
+[node name="Label" type="Label" parent="Alpha" unique_id=1857740041]
+layout_mode = 0
+offset_left = 6.0
+offset_top = -30.0
+offset_right = 283.0
+offset_bottom = -2.0
+text = "Extrapolate backwards (alpha) (0-1)"
+
+[node name="Beta" type="HSlider" parent="." unique_id=2062919584 groups=["SliderBeta"]]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 112.0
+offset_right = 244.0
+offset_bottom = 128.0
+max_value = 1.0
+step = 0.05
+value = 0.2
+
+[node name="Label" type="Label" parent="Beta" unique_id=1624840667]
+layout_mode = 0
+offset_left = 6.0
+offset_top = -30.0
+offset_right = 283.0
+offset_bottom = -2.0
+text = "Extrapolate forwards (beta) (0-1)"

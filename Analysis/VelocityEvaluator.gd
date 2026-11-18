@@ -43,11 +43,17 @@ func process_frame(frame: AnalysisFrame) -> SlashInfo:
 			_in_slash = true
 			_current_slash_starting_tip_velocity = frame.tip_velocity
 			_current_slash_starting_hand_velocity = frame.hilt_velocity
-	elif (frame.tip_velocity.length() < _current_slash_starting_tip_velocity.length() * _hold_velocity_threshold \
-		or frame.hilt_velocity.length() < _current_slash_starting_hand_velocity.length() * _hold_velocity_threshold):
+	elif (threshold_velocity(frame.tip_velocity, _current_slash_starting_tip_velocity) \
+		or threshold_velocity(frame.hilt_velocity, _current_slash_starting_hand_velocity)):
 		_in_slash = false
 		result = SlashInfo.ENDED
 	return result
+
+func threshold_velocity(current_velocity, start_velocity) -> bool:
+	# Attempt at using the dot product with the start velocity to prevent infinite circles. This did not work very well
+	# var length_dot_start = current_velocity.normalized().dot(start_velocity.normalized())
+	# if (length_dot_start) < 0: return false
+	return current_velocity.length() < start_velocity.length() * _hold_velocity_threshold
 
 func is_slashing() -> bool:
 	return _in_slash

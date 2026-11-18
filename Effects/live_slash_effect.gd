@@ -13,6 +13,7 @@ var my_mat : ShaderMaterial
 var data: SlashCurveData
 
 var curve_type: int = 0
+var elapsed_time := 0.0
 
 func set_data(data_: SlashCurveData):
 	my_mat = SLASH_MAIN_MAT.duplicate()
@@ -25,13 +26,18 @@ func save():
 	ResourceSaver.save(mesh_instance_3d.mesh, "Recording/Recordings/saved_mesh.tres")
 
 func _process(delta: float) -> void:
+	elapsed_time += delta
 	if data and data.frames.size() > 8:
 		mesh_instance_3d.visible = true
 		
 		var my_curve: SlashCurve = build_curve(data, curve_type)
+		var my_distorter: ShapeDistorter = WavyShapeDistorter.new(0.1,5,5)
 		
 		var end_uv := my_curve.get_tip_path_length() / SlashCurveData.MAX_LENGTH
-		mesh_instance_3d.mesh = slash_curve_mesh_builder.generate_extruded_eye(my_curve, end_uv)
+		
+		var distort = func(uv, normal, tangent): return my_distorter.displace(uv, elapsed_time, normal, tangent, end_uv)
+		
+		mesh_instance_3d.mesh = slash_curve_mesh_builder.generate_extruded_eye(my_curve, end_uv, distort)
 		
 		var progress = end_uv
 		#LoggerGlobal.trace("Tip path is %f units long" % [fitting_curve.get_tip_path_length()])

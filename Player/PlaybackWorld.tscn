@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://4px7o56m1q0f" path="res://Utility/AudioSignalResponder.gd" id="11_huif0"]
 [ext_resource type="AudioStream" uid="uid://dvvei2q20g1lr" path="res://Utility/bong_001.ogg" id="12_ts8yv"]
 [ext_resource type="Script" uid="uid://ddm7dk4l61n05" path="res://Effects/live_slash_effect_generator.gd" id="13_huif0"]
+[ext_resource type="PackedScene" uid="uid://bj4vxwsl4ryni" path="res://Player/parameter_controls.tscn" id="14_ts8yv"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mvc0x"]
 albedo_texture = ExtResource("1_www4e")
@@ -131,6 +132,7 @@ environment = SubResource("Environment_4lwy2")
 script = ExtResource("5_dm5oq")
 recording_components = [NodePath("../PlaybackPlayer/XRCamera3D/RecordingComponent"), NodePath("../PlaybackPlayer/LeftHand/RecordingComponent"), NodePath("../PlaybackPlayer/RightHand/RecordingComponent"), NodePath("../PlaybackPlayer/RightHand/Sword/SwordTip/RecordingComponent")]
 current_recording = ExtResource("6_oqb4a")
+interpolate = true
 
 [node name="DemoRecordingAnalysis" type="Node" parent="." unique_id=5364303]
 script = ExtResource("7_mvc0x")
@@ -180,9 +182,16 @@ recorder = NodePath("../LiveRecorder")
 script = SubResource("GDScript_4lwy2")
 
 [node name="SaveMostRecentCurve" type="Button" parent="." unique_id=1294390846]
+visible = false
 offset_right = 40.0
 offset_bottom = 40.0
 text = "Save Curve"
+
+[node name="ParameterControls" parent="." unique_id=1598288897 instance=ExtResource("14_ts8yv")]
+offset_left = 3.0
+offset_top = 56.0
+offset_right = 190.0
+offset_bottom = 125.0
 
 [connection signal="drag_ended" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_drag_ended"]
 [connection signal="drag_started" from="UI/Timeline" to="DemoPlayer" method="_on_timeline_drag_started"]

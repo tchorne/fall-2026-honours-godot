@@ -8,6 +8,14 @@ extends Node
 
 const FLIP_X_UV = false
 
+func _ready() -> void:
+	var alpha = get_tree().get_first_node_in_group("SliderAlpha")
+	if is_instance_valid(alpha):
+		extrapolate_backward = (alpha as HSlider).value
+	var beta = get_tree().get_first_node_in_group("SliderBeta")
+	if is_instance_valid(beta):
+		extrapolate_forward = (beta as HSlider).value
+
 func generate_triangle_strip(mesh: ImmediateMesh, curve: SlashCurve) -> void:
 	mesh.clear_surfaces()
 	var last_sample := curve.sample_point(-extrapolate_backward)
@@ -70,10 +78,12 @@ func add_quad(mesh: SurfaceTool, a: Edge, b: Edge, x0: float, x1: float, reverse
 		mesh.add_vertex(b.b)
 		#mesh.surface_end()
 
-func generate_extruded_eye(curve: SlashCurve, end_uv: float) -> ArrayMesh:
+## Distort should be (uv, normal, tangent) -> Vector3
+func generate_extruded_eye(curve: SlashCurve, end_uv: float, distort: Callable) -> ArrayMesh:
 	var st := SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var previous_eye: Array[Edge] = []
+	
 	
 	
 	SurfaceTool.new()
@@ -93,7 +103,9 @@ func generate_extruded_eye(curve: SlashCurve, end_uv: float) -> ArrayMesh:
 		var up := forward.cross(sample.hilt_to_tip())
 		
 		var first_vertex := sample.hilt_position
+		first_vertex += distort.call(Vector2(t * end_uv, 0), up, forward)
 		var last_vertex := sample.tip_position
+		last_vertex += distort.call(Vector2(t * end_uv, 1), up, forward)
 		var edges : Array[Edge] = []
 		
 		
@@ -112,6 +124,11 @@ func generate_extruded_eye(curve: SlashCurve, end_uv: float) -> ArrayMesh:
 			
 			var upper_point = lerp(first_vertex, last_vertex, j) + up * height_off_curve
 			var lower_point = lerp(first_vertex, last_vertex, j) - up * height_off_curve
+			
+			var vertex_uv := Vector2(get_x_uv(t * end_uv), j)
+			upper_point += distort.call(vertex_uv, up, forward)
+			lower_point += distort.call(vertex_uv, up, forward)
+			
 			
 			if first_j:
 				upper_edge = Edge.new(first_vertex, upper_point, 1, 1-j)
